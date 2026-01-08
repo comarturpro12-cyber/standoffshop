@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Standoff Shop</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        /* --- СТИЛИ (CSS) --- */
+        :root {
+            --bg: #0f0f12;
+            --card-bg: #1c1c22;
+            --primary: #6c5ce7; /* Фиолетовый неон */
+            --accent: #a29bfe;
+            --text: #ffffff;
+            --text-gray: #b2bec3;
+            --green: #00b894;
+            --red: #d63031;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            background: linear-gradient(180deg, rgba(108, 92, 231, 0.1) 0%, rgba(15, 15, 18, 0) 100%);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(108, 92, 231, 0.7);
+        }
+
+        .header p {
+            margin: 5px 0 0;
+            font-size: 12px;
+            color: var(--text-gray);
+        }
+
+        .filters {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 0 15px 15px 15px;
+            scrollbar-width: none; /* Скрыть скроллбар */
+        }
+        .filters::-webkit-scrollbar { display: none; }
+
+        .filter-chip {
+            background: var(--card-bg);
+            border: 1px solid #2d3436;
+            color: var(--text-gray);
+            padding: 8px 16px;
+            border-radius: 50px;
+            font-size: 13px;
+            font-weight: 600;
+            white-space: nowrap;
+            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr; /* Две колонки */
+            gap: 12px;
+            padding: 0 15px 80px 15px; /* Отступ снизу под кнопку */
+        }
+
+        /* Карточка товара */
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 12px;
+            position: relative;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: transform 0.2s, border-color 0.2s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .card.selected {
+            border-color: var(--primary);
+            background: rgba(108, 92, 231, 0.05);
+        }
+
+        .badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background: var(--red);
+            font-size: 9px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            box-shadow: 0 2px 5px rgba(214, 48, 49, 0.4);
+        }
+
+        .icon-box {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .desc {
+            font-size: 10px;
+            color: var(--text-gray);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: auto;
+        }
+
+        .price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--accent);
+        }
+
+        .add-btn {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #2d3436;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: 0.2s;
+        }
+
+        .card.selected .add-btn {
+            background: var(--primary);
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* Анимация появления */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .card { animation: fadeInUp 0.5s ease backwards; }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Vesper Shop</h1>
+        <p>Premium Standoff 2 Solutions</p>
+    </div>
+
+    <div class="filters">
+        <div class="filter-chip active" onclick="filter('all', this)">All</div>
+        <div class="filter-chip" onclick="filter('android', this)">Android</div>
+        <div class="filter-chip" onclick="filter('ios', this)">iOS</div>
+        <div class="filter-chip" onclick="filter('pc', this)">PC</div>
+    </div>
+
+    <div class="grid" id="grid">
+        </div>
+
+<script>
+    // --- ЛОГИКА (JS) ---
+    const tg = window.Telegram.WebApp;
+    tg.expand(); // Раскрыть на весь экран
+
+    // Твои товары
+    const products = [
+        { id: 'legit_v3', name: 'Legit V3', type: 'android', price: 450, icon: '🛡️', desc: 'Android. Без рут прав. Аим, ВХ, Антибан.' },
+        { id: 'rage_king', name: 'Rage King', type: 'android', price: 800, icon: '🔥', desc: 'Android. Жесткий разнос. Spinbot + Kill Aura.', badge: 'HOT' },
+        { id: 'ios_pro', name: 'iOS Private', type: 'ios', price: 1200, icon: '🍏', desc: 'iPhone/iPad. Без Jailbreak. Сертификат.', badge: 'SAFE' },
+        { id: 'emu_god', name: 'Emulator God', type: 'pc', price: 600, icon: '💻', desc: 'Для LDPlayer. Обход детекта эмулятора.' },
+        { id: 'skin_changer', name: 'Skin Changer', type: 'android', price: 299, icon: '🎨', desc: 'Визуал скины. Видно на записи экрана.' },
+        { id: 'gold_pass', name: 'Gold Pass', type: 'all', price: 1500, icon: '💎', desc: 'Подписка на весь софт на месяц.' }
+    ];
+
+    let selectedProductId = null;
+
+    function render(filterType) {
+        const grid = document.getElementById('grid');
+        grid.innerHTML = ''; // Очищаем
+
+        products.forEach(p => {
+            if (filterType === 'all' || p.type === filterType || p.type === 'all') {
+                const isSelected = selectedProductId === p.id;
+                const badgeHTML = p.badge ? `<div class="badge">${p.badge}</div>` : '';
+
+                const card = document.createElement('div');
+                card.className = `card ${isSelected ? 'selected' : ''}`;
+                card.onclick = () => selectItem(p);
+
+                card.innerHTML = `
+                    ${badgeHTML}
+                    <div class="icon-box">${p.icon}</div>
+                    <div>
+                        <div class="title">${p.name}</div>
+                        <div class="desc">${p.desc}</div>
+                    </div>
+                    <div class="price-row">
+                        <div class="price">${p.price}₽</div>
+                        <div class="add-btn">${isSelected ? '✓' : '+'}</div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            }
+        });
+    }
+
+    function selectItem(product) {
+        // Вибрация
+        tg.HapticFeedback.impactOccurred('light');
+
+        if (selectedProductId === product.id) {
+            // Если уже выбрано - снимаем выделение
+            selectedProductId = null;
+            tg.MainButton.hide();
+        } else {
+            // Выбираем новое
+            selectedProductId = product.id;
+            tg.MainButton.text = `КУПИТЬ ЗА ${product.price}₽`;
+            tg.MainButton.color = "#6c5ce7"; // Фиолетовый
+            tg.MainButton.textColor = "#ffffff";
+            tg.MainButton.show();
+        }
+
+        // Перерисовываем, чтобы обновить рамки
+        const currentFilter = document.querySelector('.filter-chip.active').innerText.toLowerCase();
+        // Небольшой костыль для фильтра All
+        const filterVal = currentFilter === 'all' ? 'all' : currentFilter;
+
+        // Просто обновляем классы без полной перерисовки (для плавности)
+        document.querySelectorAll('.card').forEach(c => {
+            if (c.innerHTML.includes(product.name)) {
+                c.classList.add('selected');
+                c.querySelector('.add-btn').innerText = '✓';
+            } else {
+                c.classList.remove('selected');
+                c.querySelector('.add-btn').innerText = '+';
+            }
+        });
+
+        if (selectedProductId === null) {
+             document.querySelectorAll('.card').forEach(c => {
+                c.classList.remove('selected');
+                c.querySelector('.add-btn').innerText = '+';
+             });
+        }
+    }
+
+    // Фильтрация
+    window.filter = function(type, btn) {
+        tg.HapticFeedback.selectionChanged();
+        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        render(type);
+    }
+
+    // Отправка данных боту
+    tg.MainButton.onClick(() => {
+        const product = products.find(p => p.id === selectedProductId);
+        tg.sendData(JSON.stringify(product));
+    });
+
+    // Старт
+    render('all');
+</script>
+</body>
+</html>
