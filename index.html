@@ -3,307 +3,270 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Standoff Shop</title>
+    <title>Vesper Private Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* --- СТИЛИ (CSS) --- */
+        /* --- PREMIUM CSS --- */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;500;800&display=swap');
+
         :root {
-            --bg: #0f0f12;
-            --card-bg: #1c1c22;
-            --primary: #6c5ce7; /* Фиолетовый неон */
-            --accent: #a29bfe;
+            --bg: #09090b;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.08);
+            --primary: #8b5cf6; /* Violet */
+            --primary-glow: rgba(139, 92, 246, 0.5);
             --text: #ffffff;
-            --text-gray: #b2bec3;
-            --green: #00b894;
-            --red: #d63031;
+            --text-sec: #a1a1aa;
+            --success: #10b981;
         }
 
         body {
-            margin: 0;
-            padding: 0;
             background-color: var(--bg);
             color: var(--text);
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #09090b 60%);
+            min-height: 100vh;
         }
 
-        .header {
-            text-align: center;
-            padding: 20px 0;
-            background: linear-gradient(180deg, rgba(108, 92, 231, 0.1) 0%, rgba(15, 15, 18, 0) 100%);
+        /* Анимация фона */
+        .particles {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            background: url('https://cdn.pixabay.com/photo/2016/06/02/02/33/triangles-1430105_960_720.png') repeat;
+            opacity: 0.05;
+            animation: moveBg 60s linear infinite;
         }
+        @keyframes moveBg { from { background-position: 0 0; } to { background-position: 100% 100%; } }
 
-        .header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 0 0 10px rgba(108, 92, 231, 0.7);
-        }
+        .container { padding: 16px; padding-bottom: 100px; }
 
-        .header p {
-            margin: 5px 0 0;
-            font-size: 12px;
-            color: var(--text-gray);
-        }
-
-        .filters {
+        /* Профиль */
+        .profile-header {
             display: flex;
-            gap: 10px;
-            overflow-x: auto;
-            padding: 0 15px 15px 15px;
-            scrollbar-width: none; /* Скрыть скроллбар */
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+            padding: 12px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--card-border);
         }
-        .filters::-webkit-scrollbar { display: none; }
+        .user-info { display: flex; align-items: center; gap: 10px; }
+        .avatar { width: 36px; height: 36px; background: linear-gradient(45deg, var(--primary), #4c1d95); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; font-size: 14px; }
+        .user-name { font-size: 14px; font-weight: 600; }
+        .user-id { font-size: 10px; color: var(--text-sec); }
+        .status-badge { font-size: 10px; background: rgba(16, 185, 129, 0.2); color: var(--success); padding: 4px 8px; border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.3); }
 
-        .filter-chip {
-            background: var(--card-bg);
-            border: 1px solid #2d3436;
-            color: var(--text-gray);
-            padding: 8px 16px;
-            border-radius: 50px;
-            font-size: 13px;
-            font-weight: 600;
-            white-space: nowrap;
-            transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-        }
+        /* Заголовок */
+        .hero { text-align: center; margin-bottom: 30px; animation: fadeDown 0.8s ease; }
+        .hero h1 { font-size: 28px; font-weight: 800; margin: 0; background: linear-gradient(to right, #fff, #a78bfa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: -1px; }
+        .hero p { font-size: 12px; color: var(--text-sec); margin-top: 6px; }
 
-        .filter-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-            box-shadow: 0 4px 15px rgba(108, 92, 231, 0.4);
-        }
+        /* Категории */
+        .tabs { display: flex; gap: 8px; margin-bottom: 20px; overflow-x: auto; padding-bottom: 5px; scrollbar-width: none; }
+        .tab { background: var(--card-bg); border: 1px solid var(--card-border); padding: 8px 16px; border-radius: 100px; font-size: 12px; font-weight: 500; color: var(--text-sec); white-space: nowrap; transition: 0.3s; }
+        .tab.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 15px var(--primary-glow); }
 
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr; /* Две колонки */
-            gap: 12px;
-            padding: 0 15px 80px 15px; /* Отступ снизу под кнопку */
-        }
+        /* Сетка товаров */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
-        /* Карточка товара */
         .card {
             background: var(--card-bg);
+            border: 1px solid var(--card-border);
             border-radius: 16px;
-            padding: 12px;
+            padding: 16px;
             position: relative;
-            border: 1px solid rgba(255,255,255,0.05);
-            transition: transform 0.2s, border-color 0.2s;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .card:active {
-            transform: scale(0.98);
-        }
-
-        .card.selected {
-            border-color: var(--primary);
-            background: rgba(108, 92, 231, 0.05);
-        }
-
-        .badge {
-            position: absolute;
-            top: 8px;
-            right: 8px;
-            background: var(--red);
-            font-size: 9px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(214, 48, 49, 0.4);
-        }
-
-        .icon-box {
-            font-size: 32px;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-
-        .title {
-            font-size: 14px;
-            font-weight: 700;
-            margin-bottom: 4px;
-            line-height: 1.2;
-        }
-
-        .desc {
-            font-size: 10px;
-            color: var(--text-gray);
-            margin-bottom: 10px;
-            line-height: 1.4;
-        }
-
-        .price-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: auto;
-        }
-
-        .price {
-            font-size: 16px;
-            font-weight: 800;
-            color: var(--accent);
-        }
-
-        .add-btn {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: #2d3436;
-            color: white;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            overflow: hidden;
             display: flex;
             align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: 0.2s;
+            gap: 15px;
         }
 
-        .card.selected .add-btn {
-            background: var(--primary);
-            box-shadow: 0 0 10px var(--primary);
+        .card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 50%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
+            transform: skewX(-25deg); transition: 0.5s;
         }
+        .card:hover::before { left: 150%; } /* Блик при наведении */
+        
+        .card:active { transform: scale(0.98); background: rgba(255,255,255,0.05); }
+        .card.selected { border-color: var(--primary); background: rgba(139, 92, 246, 0.08); box-shadow: 0 0 20px rgba(139, 92, 246, 0.1); }
 
-        /* Анимация появления */
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .card-icon { font-size: 28px; width: 50px; height: 50px; background: rgba(0,0,0,0.3); border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+        .card-info { flex: 1; }
+        .card-title { font-weight: 700; font-size: 15px; margin-bottom: 4px; }
+        .card-desc { font-size: 11px; color: var(--text-sec); line-height: 1.3; }
+        .card-price { font-weight: 800; font-size: 16px; color: #a78bfa; margin-top: 4px; }
+        
+        .hot-badge { position: absolute; top: 8px; right: 8px; background: #ef4444; font-size: 9px; padding: 2px 6px; border-radius: 4px; font-weight: 800; box-shadow: 0 0 10px rgba(239, 68, 68, 0.4); }
+
+        /* Всплывающее уведомление (Fake Sales) */
+        .toast {
+            position: fixed; bottom: 80px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); border: 1px solid #333;
+            padding: 8px 16px; border-radius: 30px; display: flex; align-items: center; gap: 8px;
+            font-size: 11px; opacity: 0; transition: 0.5s; width: max-content; pointer-events: none; z-index: 100;
         }
+        .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+        .toast img { width: 16px; height: 16px; border-radius: 50%; }
 
-        .card { animation: fadeInUp 0.5s ease backwards; }
+        @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .card { animation: fadeInUp 0.5s backwards; }
         .card:nth-child(1) { animation-delay: 0.1s; }
         .card:nth-child(2) { animation-delay: 0.2s; }
         .card:nth-child(3) { animation-delay: 0.3s; }
-        .card:nth-child(4) { animation-delay: 0.4s; }
 
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>Vesper Shop</h1>
-        <p>Premium Standoff 2 Solutions</p>
-    </div>
+    <div class="particles"></div>
 
-    <div class="filters">
-        <div class="filter-chip active" onclick="filter('all', this)">All</div>
-        <div class="filter-chip" onclick="filter('android', this)">Android</div>
-        <div class="filter-chip" onclick="filter('ios', this)">iOS</div>
-        <div class="filter-chip" onclick="filter('pc', this)">PC</div>
-    </div>
-
-    <div class="grid" id="grid">
+    <div class="container">
+        <div class="profile-header">
+            <div class="user-info">
+                <div class="avatar" id="avatar">U</div>
+                <div>
+                    <div class="user-name" id="username">Guest</div>
+                    <div class="user-id" id="userid">ID: Loading...</div>
+                </div>
+            </div>
+            <div class="status-badge">● ONLINE</div>
         </div>
 
-<script>
-    // --- ЛОГИКА (JS) ---
-    const tg = window.Telegram.WebApp;
-    tg.expand(); // Раскрыть на весь экран
+        <div class="hero">
+            <h1>VESPER</h1>
+            <p>Premium Software Market</p>
+        </div>
 
-    // Твои товары
+        <div class="tabs">
+            <div class="tab active" onclick="filter('all', this)">Все</div>
+            <div class="tab" onclick="filter('android', this)">Android</div>
+            <div class="tab" onclick="filter('ios', this)">iOS</div>
+            <div class="tab" onclick="filter('pc', this)">PC</div>
+        </div>
+
+        <div class="grid" id="grid"></div>
+    </div>
+
+    <div class="toast" id="toast">
+        <div style="width:10px; height:10px; background:#10b981; border-radius:50%;"></div>
+        <span id="toast-text">User123 купил Legit V3</span>
+    </div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    
+    // 1. Получаем данные пользователя из Телеграма
+    const user = tg.initDataUnsafe.user;
+    if (user) {
+        document.getElementById('username').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+        document.getElementById('userid').innerText = `ID: ${user.id}`;
+        document.getElementById('avatar').innerText = user.first_name[0].toUpperCase();
+    }
+
+    // 2. База товаров
     const products = [
-        { id: 'legit_v3', name: 'Legit V3', type: 'android', price: 450, icon: '🛡️', desc: 'Android. Без рут прав. Аим, ВХ, Антибан.' },
-        { id: 'rage_king', name: 'Rage King', type: 'android', price: 800, icon: '🔥', desc: 'Android. Жесткий разнос. Spinbot + Kill Aura.', badge: 'HOT' },
-        { id: 'ios_pro', name: 'iOS Private', type: 'ios', price: 1200, icon: '🍏', desc: 'iPhone/iPad. Без Jailbreak. Сертификат.', badge: 'SAFE' },
-        { id: 'emu_god', name: 'Emulator God', type: 'pc', price: 600, icon: '💻', desc: 'Для LDPlayer. Обход детекта эмулятора.' },
-        { id: 'skin_changer', name: 'Skin Changer', type: 'android', price: 299, icon: '🎨', desc: 'Визуал скины. Видно на записи экрана.' },
-        { id: 'gold_pass', name: 'Gold Pass', type: 'all', price: 1500, icon: '💎', desc: 'Подписка на весь софт на месяц.' }
+        { id: 1, name: 'Legit V3', type: 'android', price: 450, icon: '🛡️', desc: 'NoRoot. Аим, ЕСП, Антибан система.', badge: 'BEST' },
+        { id: 2, name: 'Rage King', type: 'android', price: 890, icon: '☠️', desc: 'Spinbot, KillAura. Для буста ранга.', badge: 'HOT' },
+        { id: 3, name: 'iOS Private', type: 'ios', price: 1200, icon: '🍏', desc: 'Без Jailbreak. Сертификат включен.' },
+        { id: 4, name: 'Emulator God', type: 'pc', price: 650, icon: '💻', desc: 'Обход эмулятора LDPlayer / BlueStacks.' },
+        { id: 5, name: 'Skin Changer', type: 'android', price: 299, icon: '🎨', desc: 'Визуал скины, видно на записи.' },
+        { id: 6, name: 'Full Pack', type: 'all', price: 2500, icon: '💎', desc: 'Доступ ко всему софту навсегда.' }
     ];
 
-    let selectedProductId = null;
+    // 3. Рендер товаров
+    let selectedId = null;
 
     function render(filterType) {
         const grid = document.getElementById('grid');
-        grid.innerHTML = ''; // Очищаем
-
+        grid.innerHTML = '';
+        
         products.forEach(p => {
             if (filterType === 'all' || p.type === filterType || p.type === 'all') {
-                const isSelected = selectedProductId === p.id;
-                const badgeHTML = p.badge ? `<div class="badge">${p.badge}</div>` : '';
-
-                const card = document.createElement('div');
-                card.className = `card ${isSelected ? 'selected' : ''}`;
-                card.onclick = () => selectItem(p);
-
-                card.innerHTML = `
-                    ${badgeHTML}
-                    <div class="icon-box">${p.icon}</div>
-                    <div>
-                        <div class="title">${p.name}</div>
-                        <div class="desc">${p.desc}</div>
-                    </div>
-                    <div class="price-row">
-                        <div class="price">${p.price}₽</div>
-                        <div class="add-btn">${isSelected ? '✓' : '+'}</div>
+                const isSel = selectedId === p.id;
+                const badge = p.badge ? `<div class="hot-badge">${p.badge}</div>` : '';
+                
+                const el = document.createElement('div');
+                el.className = `card ${isSel ? 'selected' : ''}`;
+                el.onclick = () => select(p);
+                el.innerHTML = `
+                    ${badge}
+                    <div class="card-icon">${p.icon}</div>
+                    <div class="card-info">
+                        <div class="card-title">${p.name}</div>
+                        <div class="card-desc">${p.desc}</div>
+                        <div class="card-price">${p.price}₽</div>
                     </div>
                 `;
-                grid.appendChild(card);
+                grid.appendChild(el);
             }
         });
     }
 
-    function selectItem(product) {
-        // Вибрация
-        tg.HapticFeedback.impactOccurred('light');
-
-        if (selectedProductId === product.id) {
-            // Если уже выбрано - снимаем выделение
-            selectedProductId = null;
+    function select(p) {
+        tg.HapticFeedback.impactOccurred('medium');
+        if (selectedId === p.id) {
+            selectedId = null;
             tg.MainButton.hide();
         } else {
-            // Выбираем новое
-            selectedProductId = product.id;
-            tg.MainButton.text = `КУПИТЬ ЗА ${product.price}₽`;
-            tg.MainButton.color = "#6c5ce7"; // Фиолетовый
+            selectedId = p.id;
+            tg.MainButton.text = `КУПИТЬ ЗА ${p.price}₽`;
+            tg.MainButton.color = "#8b5cf6";
             tg.MainButton.textColor = "#ffffff";
             tg.MainButton.show();
         }
-
-        // Перерисовываем, чтобы обновить рамки
-        const currentFilter = document.querySelector('.filter-chip.active').innerText.toLowerCase();
-        // Небольшой костыль для фильтра All
-        const filterVal = currentFilter === 'all' ? 'all' : currentFilter;
-
-        // Просто обновляем классы без полной перерисовки (для плавности)
+        
+        // Обновляем визуал без полной перерисовки
         document.querySelectorAll('.card').forEach(c => {
-            if (c.innerHTML.includes(product.name)) {
-                c.classList.add('selected');
-                c.querySelector('.add-btn').innerText = '✓';
-            } else {
-                c.classList.remove('selected');
-                c.querySelector('.add-btn').innerText = '+';
-            }
+            if(c.innerHTML.includes(p.name) && selectedId) c.classList.add('selected');
+            else c.classList.remove('selected');
         });
-
-        if (selectedProductId === null) {
-             document.querySelectorAll('.card').forEach(c => {
-                c.classList.remove('selected');
-                c.querySelector('.add-btn').innerText = '+';
-             });
-        }
     }
 
-    // Фильтрация
-    window.filter = function(type, btn) {
+    window.filter = (type, btn) => {
         tg.HapticFeedback.selectionChanged();
-        document.querySelectorAll('.filter-chip').forEach(b => b.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
         btn.classList.add('active');
         render(type);
     }
 
-    // Отправка данных боту
     tg.MainButton.onClick(() => {
-        const product = products.find(p => p.id === selectedProductId);
-        tg.sendData(JSON.stringify(product));
+        const p = products.find(x => x.id === selectedId);
+        tg.sendData(JSON.stringify(p));
     });
 
-    // Старт
+    // 4. Фейковые покупки (для доверия)
+    const names = ['Veneku', 'Alex22', 'Standoffer', 'Nagibator', 'CheatUser', 'ProPlayer'];
+    const items = ['Legit V3', 'Rage King', 'Skin Changer'];
+
+    function showFakeNotify() {
+        const name = names[Math.floor(Math.random() * names.length)];
+        const item = items[Math.floor(Math.random() * items.length)];
+        const toast = document.getElementById('toast');
+        document.getElementById('toast-text').innerText = `${name} купил ${item}`;
+        
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 3000);
+        
+        // Рандомно следующее уведомление через 5-15 секунд
+        setTimeout(showFakeNotify, Math.random() * 10000 + 5000);
+    }
+
     render('all');
+    setTimeout(showFakeNotify, 4000); // Первое уведомление через 4 сек
+
 </script>
 </body>
 </html>
