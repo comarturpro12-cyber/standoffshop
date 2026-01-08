@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon Shop</title>
+    <title>Vesper Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
@@ -12,7 +12,7 @@
             --bg: #050505;
             --card: #121212;
             --border: #2a2a2a;
-            --accent: #6d28d9; /* Фиолетовый акцент */
+            --accent: #6d28d9; /* Vesper Purple */
             --text: #ffffff;
             --gray: #888;
         }
@@ -24,14 +24,13 @@
             margin: 0; padding: 0;
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
-            /* Легкий фоновый градиент */
-            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #050505 50%);
+            background-image: radial-gradient(circle at 50% 0%, #2e1065 0%, #050505 60%);
             min-height: 100vh;
         }
 
         .container { padding: 16px; padding-bottom: 100px; }
 
-        /* HEADER & PROFILE */
+        /* HEADER */
         .header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 20px; padding: 12px;
@@ -73,7 +72,7 @@
         .tab.active { background: var(--accent); color: white; border-color: var(--accent); box-shadow: 0 0 15px rgba(109, 40, 217, 0.4); }
 
         /* GRID */
-        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; } /* Одна колонка для больших карточек */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
         
         .card {
             background: var(--card); border: 1px solid var(--border);
@@ -83,7 +82,7 @@
         .card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
         
         .card-img {
-            width: 100%; height: 160px; /* Картинка побольше */
+            width: 100%; height: 180px; 
             object-fit: cover; border-bottom: 1px solid var(--border);
             background: #000;
         }
@@ -102,7 +101,6 @@
         }
         .card.selected .add-btn { background: var(--accent); }
 
-        /* Бейджик платформы */
         .platform-badge {
             font-size: 10px; padding: 4px 8px; border-radius: 4px;
             background: rgba(255,255,255,0.1); color: #ccc; font-weight: 600;
@@ -117,20 +115,20 @@
         
         <div class="header">
             <div class="user-box">
-                <div class="avatar" id="avatar">X</div>
+                <div class="avatar" id="avatar">V</div>
                 <div class="user-meta">
                     <div id="username">Guest</div>
-                    <div id="userid">Loading ID...</div>
+                    <div id="userid">Loading...</div>
                 </div>
             </div>
             <div class="server-status">
-                <div class="ping">18ms</div>
+                <div class="ping">12ms</div>
                 <div class="status-text">Servers Online</div>
             </div>
         </div>
 
         <div class="hero">
-            <h1>XENON STORE</h1>
+            <h1>VESPER SHOP</h1>
             <p>Premium Undetected Software</p>
         </div>
 
@@ -148,7 +146,7 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
     
-    // Профиль
+    // Получение данных юзера
     const user = tg.initDataUnsafe.user;
     if (user) {
         document.getElementById('username').innerText = user.first_name;
@@ -156,25 +154,24 @@
         document.getElementById('avatar').innerText = user.first_name[0].toUpperCase();
     }
 
-    // --- ТВОИ ДВА ТОВАРА ---
-    // Убедись, что картинки называются точно так же и лежат в корне!
+    // --- ТОЛЬКО 2 ТОВАРА (Vesper) ---
     const products = [
         { 
             id: 1, 
             type: 'android', 
-            name: 'Xenon Android', 
+            name: 'Vesper Android No Root', 
             price: 450, 
-            desc: 'Мощный функционал без рут прав. Legit & Rage настройки. Полный Undetected 2026.',
-            img: 'noroot.png', // Твоя картинка
+            desc: 'Legit & Rage настройки. Полный Undetected 2026. Без рут прав.',
+            img: 'noroot.png', // Проверь, что файл называется именно так!
             badge: 'NO ROOT'
         },
         { 
             id: 2, 
             type: 'ios', 
-            name: 'Xenon iOS', 
+            name: 'Vesper IOS Standoff 2', 
             price: 1200, 
-            desc: 'Приватная версия для iPhone/iPad. Работает без Jailbreak. Сертификат в комплекте.',
-            img: 'ios.png', // Твоя картинка
+            desc: 'Приватная версия для iPhone/iPad. Без Jailbreak. Сертификат.',
+            img: 'ios.png', // Проверь, что файл называется именно так!
             badge: 'NO JAIL'
         }
     ];
@@ -223,7 +220,6 @@
             tg.MainButton.textColor = "#fff";
             tg.MainButton.show();
         }
-        // Обновляем отображение кнопок
         const currentFilter = document.querySelector('.tab.active').innerText.toLowerCase();
         render(currentFilter); 
     }
@@ -240,7 +236,6 @@
         tg.sendData(JSON.stringify(p));
     });
 
-    // Запуск
     render('all');
 
 </script>
