@@ -26,13 +26,22 @@
 
         @keyframes border-rgb {
             0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-            14% { border-color: #ff7f00; box-shadow: 0 0 15px rgba(255,127,0,0.4); }
-            28% { border-color: #ffff00; box-shadow: 0 0 15px rgba(255,255,0,0.4); }
-            42% { border-color: #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.4); }
-            56% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0,0,255,0.4); }
-            70% { border-color: #4b0082; box-shadow: 0 0 15px rgba(75,0,130,0.4); }
-            85% { border-color: #9400d3; box-shadow: 0 0 15px rgba(148,0,211,0.4); }
+            20% { border-color: #ffff00; box-shadow: 0 0 15px rgba(255,255,0,0.4); }
+            40% { border-color: #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+            60% { border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
+            80% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0,0,255,0.4); }
             100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
+        }
+
+        /* КЛАСС ДЛЯ ТЕКСТА "НАВСЕГДА" */
+        .rgb-text {
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgb-flow 3s linear infinite;
+            font-weight: 800;
+            text-transform: uppercase;
         }
 
         body {
@@ -58,8 +67,7 @@
         .user-box { display: flex; align-items: center; gap: 10px; }
         .avatar {
             width: 40px; height: 40px; border-radius: 8px;
-            /* RGB Аватарка */
-            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
             background-size: 400% 400%;
             animation: rgb-flow 8s ease infinite;
             display: flex; align-items: center; justify-content: center;
@@ -74,7 +82,6 @@
         .hero h1 {
             font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0;
             text-transform: uppercase; letter-spacing: 3px;
-            /* ЖЕСТКИЙ RGB ТЕКСТ */
             background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
             background-size: 400%;
             -webkit-background-clip: text;
@@ -94,7 +101,6 @@
             border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s;
         }
         .nav-tab.active { 
-            /* RGB Кнопка Вкладки */
             background: linear-gradient(90deg, #3b82f6, #8b5cf6);
             color: white; 
             box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
@@ -110,7 +116,6 @@
             border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s;
         }
         
-        /* RGB РАМКА ПРИ ВЫБОРЕ */
         .card.selected { 
             animation: border-rgb 3s linear infinite;
             transform: scale(1.02);
@@ -119,8 +124,16 @@
 
         .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
         .card-body { padding: 16px; }
-        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
-        .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
+        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 8px; }
+        
+        /* Увеличил шрифт описания для читаемости длинного текста */
+        .card-desc { 
+            font-size: 13px; 
+            color: #d1d5db; 
+            line-height: 1.5; 
+            margin-bottom: 15px; 
+        }
+        
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
         .price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
         
@@ -129,7 +142,6 @@
             font-size: 14px; font-weight: 600; transition: 0.3s; 
         }
         
-        /* RGB КНОПКА КУПИТЬ */
         .card.selected .add-btn { 
             background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
             background-size: 400%;
@@ -201,6 +213,7 @@
                 <div class="info-desc">Функционал на версиях iOS и Android No Root полностью одинаков.</div>
                 <div style="margin-top:8px; font-size:11px; color:#666;">Functions Xenon Android / iOS iPhone</div>
             </div>
+            
             <div class="feature-group"><div class="group-header">🎯 Aimbot</div><div class="group-content"><ul class="f-list"><li>Aim Enable</li><li>Target Bone</li><li>FOV Check & Value</li><li>FOV Color</li><li>Smooth X / Y</li><li>Recoil X / Y</li><li>Jump Check</li><li>Visible Check</li></ul></div></div>
             <div class="feature-group"><div class="group-header">☠ Silent Aim</div><div class="group-content"><ul class="f-list"><li>Silent Enable</li><li>Auto Fire</li><li>Target Bone</li><li>FOV Settings</li><li class="full-width">Hit Chance (0–100%)</li><li>Ignore Smoke</li><li>Jump Check</li></ul></div></div>
             <div class="feature-group"><div class="group-header">👁 Visuals (ESP)</div><div class="group-content"><ul class="f-list"><li>ESP Box / Line</li><li>ESP HP / Armor</li><li>ESP Weapon</li><li>ESP Name / Avatar</li><li>ESP Distance</li><li>ESP Money</li><li>iOS Indicator</li><li>Bomber Indicator</li></ul></div></div>
@@ -216,9 +229,8 @@
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-    tg.ready(); // Сообщаем о готовности
+    tg.ready();
 
-    // ИНИЦИАЛИЗАЦИЯ ПРОФИЛЯ
     function initProfile() {
         const user = tg.initDataUnsafe.user;
         if (user) {
@@ -227,24 +239,32 @@
             const initial = user.first_name ? user.first_name[0] : (user.username ? user.username[0] : 'X');
             document.getElementById('avatar').innerText = initial.toUpperCase();
         } else {
-            // Если открыто не в телеграм
             document.getElementById('username').innerText = "Guest Mode";
             document.getElementById('userid').innerText = "Open via Telegram";
         }
     }
     initProfile();
 
-    // ТОВАРЫ
+    // ОБНОВЛЕННЫЕ ОПИСАНИЯ ТОВАРОВ
     const products = [
         { 
-            id: 1, type: 'android', name: 'Xenon Android No Root', price: 450, 
-            desc: 'Legit & Rage настройки. Полный Undetected 2026. Без рут прав.', 
-            img: 'noroot.png', badge: 'NO ROOT' 
+            id: 1, 
+            type: 'android', 
+            name: 'Xenon Android No Root', 
+            price: 450, 
+            // Используем <span class="rgb-text"> для переливания
+            desc: 'Legit и Rage Настройки, Антибан, Undetected функции 2026, Без рут прав на все версии Андроид. Время подписки - <span class="rgb-text">НАВСЕГДА</span>.<br><br>После оплаты - бот скидывает вам ключ и ссылку на приватный чат с покупателями, в этом чате буду опубликовываться новые версии софта на все обновления.', 
+            img: 'noroot.png', 
+            badge: 'NO ROOT' 
         },
         { 
-            id: 2, type: 'ios', name: 'Xenon iOS Private', price: 1200, 
-            desc: 'Приватная версия для iPhone/iPad. Без Jailbreak. Сертификат.', 
-            img: 'ios.png', badge: 'NO JAIL' 
+            id: 2, 
+            type: 'ios', 
+            name: 'Xenon iOS Private', 
+            price: 1200, 
+            desc: 'Legit и Rage Настройки, Антибан, Undetected функции 2026, Без джейлбрейка на все версии iPhone/iPad, время подписки - <span class="rgb-text">НАВСЕГДА</span>.<br><br>После оплаты - бот скидывает вам ключ и ссылку на приватный чат с покупателями, в этом чате буду опубликовываться новые версии софта на все обновления.', 
+            img: 'ios.png', 
+            badge: 'NO JAIL' 
         }
     ];
 
