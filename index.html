@@ -3,49 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon Standoff</title>
+    <title>Xenon Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ТВОЙ СТИЛЬ */
+        /* --- СТИЛИ (Твоя база) --- */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
         :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; }
+        
         @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes border-rgb { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } 50% { border-color: #0000ff; } 100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } }
         .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; font-weight: 800; text-transform: uppercase; }
+        
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
         .container { padding: 16px; padding-bottom: 80px; }
+        
+        /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; backdrop-filter: blur(10px); }
         .user-box { display: flex; align-items: center; gap: 10px; }
         .avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff; text-transform: uppercase; }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; } .user-meta div:last-child { font-size: 11px; color: var(--gray); }
+        
+        /* КНОПКА НАЗАД (Скрыта по умолчанию) */
+        #back-btn { display: none; font-size: 24px; cursor: pointer; color: var(--accent); margin-right: 10px; }
+
         .hero { text-align: center; margin: 25px 0; }
         .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0; text-transform: uppercase; letter-spacing: 3px; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 5s linear infinite; }
         .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
+
+        /* НАВИГАЦИЯ */
         .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
         .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; }
         .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
-        .section { display: none; animation: fadeIn 0.4s ease; } .section.active { display: block; }
+
+        /* ЭКРАНЫ */
+        .view { display: none; animation: fadeIn 0.3s ease; }
+        .view.active { display: block; }
+
+        /* КАРТОЧКИ ТОВАРОВ (Главная) */
         .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s; }
-        .card.selected { animation: border-rgb 3s linear infinite; transform: scale(1.02); background: rgba(255,255,255,0.02); }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; }
         .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
         .card-body { padding: 16px; }
         .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
         .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
-        .add-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; transition: 0.3s; }
-        .card.selected .add-btn { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; animation: rgb-flow 3s linear infinite; color: black; box-shadow: 0 0 15px rgba(255,255,255,0.4); font-weight: 800; }
+        .go-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; transition: 0.2s; }
+        .go-btn:active { transform: scale(0.95); background: var(--accent); }
         .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
-        .info-block { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; }
-        .feature-group { margin-bottom: 15px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .group-header { padding: 12px 16px; background: rgba(255,255,255,0.03); font-weight: 600; font-size: 14px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .group-content { padding: 12px 16px; }
-        .f-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .f-list li { font-size: 11px; color: #d1d5db; display: flex; align-items: center; gap: 6px; }
-        .f-list li::before { content: '▪'; color: #52525b; }
+
+        /* ДЕТАЛЬНАЯ СТРАНИЦА */
+        .detail-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
+        .detail-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; }
+        .detail-desc { font-size: 13px; color: #d1d5db; line-height: 1.6; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        
+        .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .plan-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
+        .plan-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); transform: scale(1.02); }
+        .plan-duration { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .plan-price { font-size: 16px; font-family: 'Rajdhani', sans-serif; color: var(--accent); font-weight: 800; }
         .full-width { grid-column: span 2; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -54,6 +71,8 @@
         
         <div class="header">
             <div class="user-box">
+                <div id="back-btn" onclick="goBack()">‹</div>
+                
                 <div class="avatar" id="avatar">X</div>
                 <div class="user-meta">
                     <div id="username">Guest</div>
@@ -66,38 +85,46 @@
             </div>
         </div>
 
-        <div class="hero"><h1>XENON</h1><p>Premium Undetected Software</p></div>
-
-        <div class="nav-tabs">
-            <div class="nav-tab active" onclick="switchTab('shop')">МАГАЗИН</div>
-            <div class="nav-tab" onclick="switchTab('features')">ФУНКЦИОНАЛ</div>
+        <div id="main-hero" class="hero">
+            <h1>XENON</h1>
+            <p>Premium Undetected Software</p>
         </div>
 
-        <div id="shop" class="section active"><div class="grid" id="grid"></div></div>
-
-        <div id="features" class="section">
-            <div class="info-block"><div style="font-weight:bold;color:#fff;margin-bottom:5px;">ℹ ВАЖНО</div><div style="font-size:12px;color:#93c5fd;">Функционал на iOS и Android No Root одинаков.</div></div>
-            <div class="feature-group"><div class="group-header">🎯 Aimbot</div><div class="group-content"><ul class="f-list"><li>Aim Enable</li><li>Target Bone</li></ul></div></div>
+        <div id="shop-view" class="view active">
+            <div class="nav-tabs">
+                <div class="nav-tab active">МАГАЗИН</div>
+                <div class="nav-tab" style="opacity: 0.5;">ФУНКЦИОНАЛ</div>
+            </div>
+            <div class="grid" id="products-grid"></div>
         </div>
+
+        <div id="detail-view" class="view">
+            <img id="d-img" src="" class="detail-img">
+            <div id="d-title" class="detail-title"></div>
+            <div id="d-desc" class="detail-desc"></div>
+            
+            <div style="margin-bottom: 10px; font-size: 12px; color: var(--gray); text-transform: uppercase; font-weight: 700;">Выберите срок подписки:</div>
+            <div class="plans-grid" id="plans-grid">
+                </div>
+        </div>
+
     </div>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // --- ФИКС ИМЕНИ (ЧИТАЕМ ИЗ ССЫЛКИ) ---
+    // --- ПРОФИЛЬ (Железная ссылка) ---
     function initProfile() {
         const urlParams = new URLSearchParams(window.location.search);
         const nameFromUrl = urlParams.get('name');
         const uidFromUrl = urlParams.get('uid');
 
         if (nameFromUrl) {
-            // Приоритет: данные из ссылки (передал бот)
             document.getElementById('username').innerText = nameFromUrl;
             document.getElementById('userid').innerText = `ID: ${uidFromUrl}`;
             document.getElementById('avatar').innerText = nameFromUrl[0].toUpperCase();
         } else {
-            // Резерв: данные из Телеграм (если открыли без ссылки)
             const user = tg.initDataUnsafe.user;
             if (user) {
                 document.getElementById('username').innerText = user.first_name;
@@ -108,30 +135,56 @@
     }
     initProfile();
 
+    // --- БАЗА ТОВАРОВ И ТАРИФОВ ---
     const products = [
-        { id: 1, type: 'android', name: 'Xenon Android No Root', price: 450, desc: 'Legit & Rage настройки. Полный Undetected 2026. <span class="rgb-text">НАВСЕГДА</span>.', img: 'noroot.png', badge: 'NO ROOT' },
-        { id: 2, type: 'ios', name: 'Xenon iOS Private', price: 1200, desc: 'Приватная версия для iPhone/iPad. Без Jailbreak. <span class="rgb-text">НАВСЕГДА</span>.', img: 'ios.png', badge: 'NO JAIL' }
+        { 
+            id: 'android', 
+            name: 'Xenon Android No Root', 
+            badge: 'NO ROOT',
+            img: 'noroot.png',
+            short_desc: 'Legit & Rage настройки. Полный Undetected 2026.',
+            full_desc: 'Мощный чит для Android без рут прав. Включает в себя Aimbot, ESP, Skinchanger и Radar. Полностью безопасен для основы.',
+            plans: [
+                { label: '7 Дней', price: 150 },
+                { label: '14 Дней', price: 250 },
+                { label: '30 Дней', price: 450 },
+                { label: '90 Дней', price: 1100 },
+                { label: 'НАВСЕГДА', price: 2500, special: true } // special делает кнопку широкой
+            ]
+        },
+        { 
+            id: 'ios', 
+            name: 'Xenon iOS Private', 
+            badge: 'NO JAIL',
+            img: 'ios.png',
+            short_desc: 'Приватная версия для iPhone/iPad. Без Jailbreak.',
+            full_desc: 'Эксклюзивный софт для iOS. Установка через TestFlight или прямым IPA. Не требует джейлбрейка. Встроенный обход записи экрана.',
+            plans: [
+                { label: '30 Дней', price: 1200 },
+                { label: 'НАВСЕГДА', price: 4500, special: true }
+            ]
+        }
     ];
 
-    let selected = null;
+    let currentProduct = null;
+    let selectedPlan = null;
 
-    function renderProducts() {
-        const grid = document.getElementById('grid');
+    // --- РЕНДЕР ГЛАВНОЙ СТРАНИЦЫ ---
+    function renderShop() {
+        const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
         products.forEach(p => {
-            const isSel = selected === p.id;
             const div = document.createElement('div');
-            div.className = `card ${isSel ? 'selected' : ''}`;
-            div.onclick = () => select(p);
+            div.className = 'card';
             div.innerHTML = `
                 <div class="badge">${p.badge}</div>
-                <img src="${p.img}" class="card-img" alt="${p.name}">
+                <img src="${p.img}" class="card-img">
                 <div class="card-body">
                     <div class="card-title">${p.name}</div>
-                    <div class="card-desc">${p.desc}</div>
+                    <div class="card-desc">${p.short_desc}</div>
                     <div class="card-footer">
-                        <div class="price">${p.price}₽</div>
-                        <div class="add-btn">${isSel ? 'ВЫБРАНО' : 'КУПИТЬ'}</div>
+                        <div style="font-size:12px; color:#666;">От ${p.plans[0].price}₽</div>
+                        <div class="go-btn" onclick="openDetail('${p.id}')">ПЕРЕЙТИ ➔</div>
                     </div>
                 </div>
             `;
@@ -139,39 +192,90 @@
         });
     }
 
-    function select(p) {
-        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
-        if (selected === p.id) {
-            selected = null;
-            tg.MainButton.hide();
-        } else {
-            selected = p.id;
-            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()}`;
-            tg.MainButton.color = "#3b82f6";
-            tg.MainButton.textColor = "#fff";
-            tg.MainButton.show();
-        }
-        renderProducts();
+    // --- ОТКРЫТЬ ТОВАР ---
+    window.openDetail = function(id) {
+        currentProduct = products.find(x => x.id === id);
+        selectedPlan = null;
+        tg.MainButton.hide(); // Скрываем кнопку покупки пока не выбран тариф
+
+        // Заполняем инфу
+        document.getElementById('d-img').src = currentProduct.img;
+        document.getElementById('d-title').innerText = currentProduct.name;
+        document.getElementById('d-desc').innerText = currentProduct.full_desc;
+
+        // Генерируем кнопки тарифов
+        const plansContainer = document.getElementById('plans-grid');
+        plansContainer.innerHTML = '';
+        
+        currentProduct.plans.forEach((plan, index) => {
+            const btn = document.createElement('div');
+            btn.className = `plan-card ${plan.special ? 'full-width' : ''}`;
+            btn.onclick = () => selectPlan(index);
+            btn.id = `plan-${index}`;
+            btn.innerHTML = `
+                <div class="plan-duration">${plan.label}</div>
+                <div class="plan-price">${plan.price}₽</div>
+            `;
+            plansContainer.appendChild(btn);
+        });
+
+        // Переключаем вид
+        document.getElementById('shop-view').classList.remove('active');
+        document.getElementById('detail-view').classList.add('active');
+        document.getElementById('back-btn').style.display = 'block';
+        document.getElementById('main-hero').style.display = 'none'; // Скрываем большой заголовок
     }
 
+    // --- ВЫБРАТЬ ТАРИФ ---
+    function selectPlan(index) {
+        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        
+        // Убираем выделение со всех
+        document.querySelectorAll('.plan-card').forEach(el => el.classList.remove('active'));
+        // Добавляем новому
+        document.getElementById(`plan-${index}`).classList.add('active');
+
+        selectedPlan = currentProduct.plans[index];
+
+        // Показываем ГЛАВНУЮ КНОПКУ
+        tg.MainButton.text = `КУПИТЬ ЗА ${selectedPlan.price}₽`;
+        tg.MainButton.color = "#3b82f6";
+        tg.MainButton.textColor = "#fff";
+        tg.MainButton.show();
+    }
+
+    // --- НАЗАД ---
+    window.goBack = function() {
+        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        document.getElementById('detail-view').classList.remove('active');
+        document.getElementById('shop-view').classList.add('active');
+        document.getElementById('back-btn').style.display = 'none';
+        document.getElementById('main-hero').style.display = 'block';
+        tg.MainButton.hide();
+        currentProduct = null;
+        selectedPlan = null;
+    }
+
+    // --- ОТПРАВКА БОТУ ---
     tg.MainButton.onClick(() => {
-        const p = products.find(x => x.id === selected);
-        if (p) {
-            tg.sendData(JSON.stringify(p));
+        if (currentProduct && selectedPlan) {
+            // Формируем красивое название для чека
+            // Например: "Xenon Android No Root (30 Дней)"
+            const finalData = {
+                name: `${currentProduct.name} (${selectedPlan.label})`,
+                price: selectedPlan.price
+            };
+            
+            tg.sendData(JSON.stringify(finalData));
             setTimeout(() => { tg.close(); }, 100);
         }
     });
 
-    window.switchTab = function(tabName) {
-        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
-        document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-        document.getElementById(tabName).classList.add('active');
-        const btnIndex = tabName === 'shop' ? 0 : 1;
-        document.querySelectorAll('.nav-tab')[btnIndex].classList.add('active');
-    }
+    // Обработка кнопки "Назад" на Андроиде
+    tg.BackButton.onClick(goBack);
 
-    renderProducts();
+    renderShop();
+
 </script>
 </body>
 </html>
