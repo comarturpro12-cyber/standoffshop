@@ -3,223 +3,106 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon Store</title>
+    <title>Standoff Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
-
-        :root {
-            --bg-color: #050505;
-            --card-bg: #111111;
-            --accent: #3b82f6; /* Синий неон */
-            --accent-glow: rgba(59, 130, 246, 0.5);
-            --text-main: #ffffff;
-            --text-sec: #9ca3af;
-        }
-
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
-            font-family: 'Inter', sans-serif;
+            background-color: #050505;
+            color: #ffffff;
+            font-family: sans-serif;
             margin: 0;
-            padding: 0;
+            padding: 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Header */
-        .header {
-            width: 100%;
-            padding: 20px;
-            text-align: center;
-            background: radial-gradient(circle at top, #1e1b4b, transparent 70%);
-        }
-
-        .logo {
-            font-family: 'Rajdhani', sans-serif;
-            font-size: 32px;
-            font-weight: 800;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-shadow: 0 0 15px var(--accent-glow);
-        }
-        
-        .version {
-            font-size: 12px;
-            color: var(--accent);
-            border: 1px solid var(--accent);
-            padding: 2px 8px;
-            border-radius: 4px;
-            margin-top: 5px;
-            display: inline-block;
-        }
-
-        /* Product Card */
-        .container {
-            width: 90%;
-            max-width: 400px;
-            padding-bottom: 40px;
         }
 
         .card {
-            background: var(--card-bg);
-            border: 1px solid #222;
-            border-radius: 16px;
+            background: #111;
+            border: 1px solid #333;
+            border-radius: 15px;
             padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-        }
-
-        .product-image {
             width: 100%;
-            height: 180px;
-            background: linear-gradient(45deg, #111, #222);
-            border-radius: 12px;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        /* Имитация картинки товара */
-        .product-image::after {
-            content: "XENON V2";
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 800;
-            font-size: 30px;
-            color: rgba(255,255,255,0.1);
-            z-index: 1;
+            max-width: 350px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
         }
 
-        .product-title {
-            font-family: 'Rajdhani', sans-serif;
+        .title {
             font-size: 24px;
-            font-weight: 700;
+            font-weight: bold;
             margin-bottom: 10px;
-        }
-
-        .feature-list {
-            list-style: none;
-            padding: 0;
-            margin: 0 0 20px 0;
-        }
-
-        .feature-list li {
-            font-size: 14px;
-            color: var(--text-sec);
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-        }
-
-        .feature-list li::before {
-            content: "⚡";
-            margin-right: 8px;
-            color: var(--accent);
-            font-size: 12px;
-        }
-
-        .price-tag {
-            font-size: 28px;
-            font-weight: 700;
-            font-family: 'Rajdhani', sans-serif;
-            color: var(--accent);
-            margin-bottom: 20px;
-        }
-
-        /* Button */
-        .buy-btn {
-            width: 100%;
-            background: var(--accent);
-            color: #fff;
-            border: none;
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 700;
             text-transform: uppercase;
+        }
+
+        .price {
+            font-size: 32px;
+            font-weight: bold;
+            color: #3b82f6; /* Синий цвет */
+            margin: 20px 0;
+        }
+
+        .desc {
+            color: #aaa;
+            font-size: 14px;
+            margin-bottom: 20px;
+            line-height: 1.5;
+            text-align: left;
+        }
+
+        .btn {
+            background: #3b82f6; /* Синяя кнопка */
+            color: white;
+            border: none;
+            padding: 15px;
+            width: 100%;
+            border-radius: 10px;
+            font-size: 18px;
+            font-weight: bold;
             cursor: pointer;
-            transition: transform 0.1s, box-shadow 0.2s;
-            box-shadow: 0 0 20px var(--accent-glow);
-            position: relative;
-            overflow: hidden;
+            text-transform: uppercase;
         }
 
-        .buy-btn:active {
-            transform: scale(0.96);
+        .btn:active {
+            transform: scale(0.95);
+            opacity: 0.8;
         }
-
-        /* Animation */
-        @keyframes pulse {
-            0% { box-shadow: 0 0 10px var(--accent-glow); }
-            50% { box-shadow: 0 0 25px var(--accent-glow); }
-            100% { box-shadow: 0 0 10px var(--accent-glow); }
-        }
-        
-        .buy-btn {
-            animation: pulse 2s infinite;
-        }
-
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <div class="logo">XENON <span style="color:var(--accent)">SYSTEMS</span></div>
-        <div class="version">UNDETECTED 🟢</div>
-    </div>
-
-    <div class="container">
+    <div class="card">
+        <div class="title">Xenon Private V2</div>
+        <div style="color: #3b82f6; font-size: 14px; margin-bottom: 15px;">Standoff 2</div>
         
-        <div class="card">
-            <div class="product-image">
-                </div>
-            
-            <div class="product-title">Standoff 2: Private V2</div>
-            
-            <ul class="feature-list">
-                <li>Legit & Rage Aimbot</li>
-                <li>ESP (Box, Lines, Health)</li>
-                <li>SkinChanger (All Skins)</li>
-                <li>Anti-Ban System</li>
-            </ul>
-
-            <div class="price-tag">450₽ <span style="font-size:14px; color:#555; text-decoration: line-through">900₽</span></div>
-
-            <button class="buy-btn" onclick="buyItem('Xenon Private Standoff', 450)">
-                КУПИТЬ ДОСТУП
-            </button>
+        <div class="desc">
+            ✅ <b>Legit Aimbot</b> (Плавная наводка)<br>
+            ✅ <b>Wallhack / ESP</b> (Видно сквозь стены)<br>
+            ✅ <b>SkinChanger</b> (Все скины)<br>
+            ✅ <b>Anti-Ban</b> (Защита аккаунта)
         </div>
 
+        <div class="price">450₽</div>
+
+        <button class="btn" onclick="buyStandoff()">КУПИТЬ ДОСТУП</button>
     </div>
 
 <script>
-    // 1. Инициализация Телеграм WebApp
     const tg = window.Telegram.WebApp;
-    tg.expand(); // Раскрываем на весь экран
+    tg.expand(); 
 
-    // 2. Функция отправки данных
-    function buyItem(name, price) {
-        
-        // Вибрация при нажатии (приятный тактильный отклик)
-        tg.HapticFeedback.impactOccurred('medium');
+    function buyStandoff() {
+        // Вибрация
+        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
 
-        // Подготовка данных
-        const data = JSON.stringify({
-            name: name,
-            price: price
-        });
+        // Отправка данных
+        tg.sendData(JSON.stringify({
+            name: "Xenon Private Standoff",
+            price: 450
+        }));
 
-        // ОТПРАВКА БОТУ
-        tg.sendData(data);
-        
-        // (Опционально) закрыть окно после клика, но лучше оставить, чтобы бот сам закрыл
-        // tg.close();
+        // ЗАКРЫТИЕ ОКНА (Важно!)
+        tg.close();
     }
 </script>
 
