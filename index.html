@@ -7,14 +7,19 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
-        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; --danger: #ef4444; --success: #10b981; }
+        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; --danger: #ef4444; }
         
         @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; font-weight: 800; text-transform: uppercase; }
-        
+        @keyframes bg-pulse { 0% { background-size: 100% 100%; } 50% { background-size: 120% 120%; } 100% { background-size: 100% 100%; } }
         @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
-        body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
+        body { 
+            background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; 
+            margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; 
+            /* СОЧНЫЙ ФОН */
+            background-image: radial-gradient(circle at 50% 0%, #1e1b4b 0%, #000000 70%);
+            background-attachment: fixed;
+        }
         .container { padding: 16px; padding-bottom: 90px; }
         
         /* HEADER */
@@ -23,7 +28,6 @@
         .avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff; text-transform: uppercase; }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; } .user-meta div:last-child { font-size: 11px; color: var(--gray); }
         
-        /* КНОПКА НАЗАД (ВЕРХНЯЯ) */
         #back-btn { display: none; font-size: 24px; cursor: pointer; color: var(--accent); margin-right: 10px; transition: 0.2s; }
         
         .hero { text-align: center; margin: 25px 0; transition: 0.3s; }
@@ -31,27 +35,42 @@
         .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
 
         /* ВКЛАДКИ */
-        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); overflow-x: auto; }
-        .nav-tab { flex: 1; text-align: center; padding: 10px 5px; font-size: 11px; font-weight: 700; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; text-transform: uppercase; white-space: nowrap; }
-        .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .nav-tab { flex: 1; text-align: center; padding: 10px 5px; font-size: 11px; font-weight: 700; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.2s; text-transform: uppercase; white-space: nowrap; }
+        .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); transform: scale(1.02); }
 
-        /* ЭКРАНЫ */
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
 
-        /* КАРТОЧКИ (Главная) */
         .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s; }
-        .card:active { transform: scale(0.98); }
+        
+        /* КАРТОЧКА ТОВАРА */
+        .card { 
+            background: rgba(15, 15, 17, 0.8); border: 1px solid var(--border); 
+            border-radius: 16px; overflow: hidden; position: relative; transition: 0.2s; 
+            backdrop-filter: blur(5px);
+        }
+        .card:active { transform: scale(0.98); border-color: var(--accent); }
         .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
         .card-body { padding: 16px; }
         .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
         .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .go-btn { padding: 10px 20px; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--accent); cursor: pointer; transition: 0.2s; letter-spacing: 1px; }
+        
+        /* СОЧНАЯ КНОПКА */
+        .go-btn { 
+            padding: 10px 20px; 
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), rgba(59, 130, 246, 0.2));
+            border: 1px solid var(--accent); 
+            border-radius: 10px; font-size: 12px; font-weight: 700; color: var(--accent); 
+            cursor: pointer; transition: 0.2s; letter-spacing: 1px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        .go-btn:active { transform: scale(0.95); background: var(--accent); color: #fff; }
+
         .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
 
-        /* ДЕТАЛЬНАЯ СТРАНИЦА */
+        /* ДЕТАЛЬНАЯ */
         .detail-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
         .detail-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
         .detail-desc { font-size: 13px; color: #d1d5db; line-height: 1.6; margin-bottom: 20px; background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
@@ -70,24 +89,24 @@
         .full-width { grid-column: span 2; }
         .rgb-border { animation: border-rgb 3s linear infinite; }
 
-        /* КНОПКА НАЗАД ВНИЗУ */
-        .bottom-back-btn { width: 100%; padding: 12px; margin-top: 20px; background: #222; border: 1px solid #333; border-radius: 10px; text-align: center; font-weight: 700; font-size: 13px; color: #888; cursor: pointer; }
-        .bottom-back-btn:active { background: #333; color: #fff; }
-
-        /* --- СТИЛИ ДЛЯ ОЧЕРЕДИ (FREE SOFT) --- */
-        .server-status {
-            background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger);
-            padding: 8px; border-radius: 8px; text-align: center; margin-bottom: 15px;
-            animation: pulse-red 2s infinite; display: flex; align-items: center; justify-content: center; gap: 10px;
+        /* МАЛЕНЬКАЯ КНОПКА НАЗАД ВНИЗУ */
+        .bottom-back-container { text-align: center; margin-top: 25px; }
+        .bottom-back-btn { 
+            display: inline-block;
+            padding: 10px 25px; 
+            background: #222; border: 1px solid #333; 
+            border-radius: 20px; 
+            font-weight: 600; font-size: 12px; color: #aaa; 
+            cursor: pointer; transition: 0.3s;
         }
+        .bottom-back-btn:active { background: #333; color: #fff; transform: scale(0.95); }
+
+        /* ОЧЕРЕДЬ */
+        .server-status { background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger); padding: 8px; border-radius: 8px; text-align: center; margin-bottom: 15px; animation: pulse-red 2s infinite; display: flex; align-items: center; justify-content: center; gap: 10px; }
         .status-dot { width: 8px; height: 8px; background: var(--danger); border-radius: 50%; }
         .status-text { color: var(--danger); font-weight: 800; font-size: 11px; letter-spacing: 1px; }
         
-        .queue-card {
-            background: var(--card); border: 1px solid var(--border);
-            padding: 20px; border-radius: 16px; text-align: center;
-            position: relative; overflow: hidden; margin-top: 20px;
-        }
+        .queue-card { background: var(--card); border: 1px solid var(--border); padding: 20px; border-radius: 16px; text-align: center; position: relative; overflow: hidden; margin-top: 20px; }
         .queue-title { color: #888; font-size: 12px; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
         .queue-number { font-family: 'Rajdhani', sans-serif; font-size: 50px; font-weight: 800; color: #fff; line-height: 1; margin-bottom: 10px; text-shadow: 0 0 20px rgba(255,255,255,0.1); }
         .queue-desc { font-size: 12px; color: #666; margin-bottom: 20px; line-height: 1.5; }
@@ -105,19 +124,17 @@
         }
         .buy-fast-btn:active { transform: scale(0.95); }
 
-        /* --- НОВОСТИ --- */
+        /* НОВОСТИ */
         .news-header { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
         .changelog-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 15px; margin-bottom: 20px; }
         .cl-title { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .red-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; animation: pulse-red 1s infinite; }
-        .cl-item { font-size: 12px; color: #d1d5db; margin-bottom: 5px; padding-left: 10px; border-left: 2px solid #333; }
+        .cl-content { font-size: 13px; color: #d1d5db; line-height: 1.5; white-space: pre-wrap; } 
         .cl-date { font-size: 10px; color: #666; margin-top: 10px; text-align: right; }
+        .empty-cl { text-align: center; color: #555; font-size: 12px; padding: 20px; font-style: italic; }
 
-        .total-users {
-            text-align: center; margin-top: 30px; font-family: 'Rajdhani', sans-serif; 
-            font-size: 16px; color: #666; font-weight: 600;
-        }
-        .total-users span { color: var(--success); font-size: 20px; font-weight: 800; }
+        .total-users { text-align: center; margin-top: 30px; font-family: 'Rajdhani', sans-serif; font-size: 14px; color: #666; font-weight: 600; }
+        .total-users span { color: #10b981; font-size: 18px; font-weight: 800; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -204,12 +221,9 @@
             <div class="news-header">XENON - НОВОСТИ</div>
             
             <div class="changelog-box">
-                <div class="cl-title">ChangeLog: (Последние обновления) <div class="red-dot"></div></div>
-                <div class="cl-item">Обновлен обход античита для Standoff 2 (0.32.0)</div>
-                <div class="cl-item">Улучшен ESP на iOS (не пропадает)</div>
-                <div class="cl-item">Исправлен баг с инжектором на Android 14</div>
-                <div class="cl-item">Добавлены новые сервера для загрузки</div>
-                <div class="cl-date">Сегодня, 14:20</div>
+                <div class="cl-title">ChangeLog <div class="red-dot"></div></div>
+                <div id="cl-content-area" class="cl-content">Загрузка...</div>
+                <div id="cl-date-area" class="cl-date"></div>
             </div>
 
             <div class="total-users">
@@ -228,7 +242,9 @@
             <div class="section-title">ВЫБЕРИТЕ СРОК ПОДПИСКИ</div>
             <div class="plans-grid" id="plans-grid"></div>
 
-            <div class="bottom-back-btn" onclick="goBack()">ВЕРНУТЬСЯ В МАГАЗИН</div>
+            <div class="bottom-back-container">
+                <div class="bottom-back-btn" onclick="goBack()">ВЕРНУТЬСЯ В МАГАЗИН</div>
+            </div>
         </div>
 
     </div>
@@ -237,12 +253,13 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // ПРОФИЛЬ
-    function initProfile() {
+    // ПРОФИЛЬ + ЧЕЙНДЖЛОГ
+    function initData() {
         const urlParams = new URLSearchParams(window.location.search);
+        
+        // 1. Профиль
         const nameFromUrl = urlParams.get('name');
         const uidFromUrl = urlParams.get('uid');
-
         if (nameFromUrl) {
             document.getElementById('username').innerText = nameFromUrl;
             document.getElementById('userid').innerText = `ID: ${uidFromUrl}`;
@@ -255,10 +272,24 @@
                 document.getElementById('avatar').innerText = user.first_name[0].toUpperCase();
             }
         }
-    }
-    initProfile();
 
-    // === ЛОГИКА ОЧЕРЕДИ ===
+        // 2. Чейнджлог (читаем из ссылки)
+        const clText = urlParams.get('cl_text');
+        const clDate = urlParams.get('cl_date');
+        const clArea = document.getElementById('cl-content-area');
+        
+        if (clText && clText !== "") {
+            // Декодируем и ставим
+            clArea.innerText = clText;
+            document.getElementById('cl-date-area').innerText = clDate || "";
+        } else {
+            clArea.innerHTML = "<div class='empty-cl'>Список изменений пуст</div>";
+            document.querySelector('.red-dot').style.display = 'none'; // Скрываем точку если нет новостей
+        }
+    }
+    initData();
+
+    // === ОЧЕРЕДЬ ===
     function initQueueSystem() {
         let startPos = localStorage.getItem('xenon_q_pos');
         let startTime = localStorage.getItem('xenon_q_time');
@@ -283,30 +314,32 @@
 
     function skipQueue() {
         switchTab('shop');
-        // Фикс скролла
         window.scrollTo({ top: 0, behavior: 'smooth' });
         tg.HapticFeedback.notificationOccurred('success');
     }
 
-    // === СЧЕТЧИК ЮЗЕРОВ ===
+    // === УМНЫЙ СЧЕТЧИК ЮЗЕРОВ ===
     function initUserCounter() {
-        // Берем сохраненное или ставим базу 2240
-        let count = localStorage.getItem('xenon_users');
-        if (!count) count = 2240;
-        count = parseInt(count);
+        // Логика: Добавляем +1 юзера раз в (15-60) минут
+        // Храним: последнее кол-во и время последнего обновления
+        
+        let count = parseInt(localStorage.getItem('xenon_u_count')) || 2240;
+        let lastUpdate = parseInt(localStorage.getItem('xenon_u_time')) || Date.now();
+
+        const now = Date.now();
+        const diffMinutes = (now - lastUpdate) / 1000 / 60;
+
+        // Если прошло больше случайного времени (генерим сид из времени)
+        // Для простоты: если прошло > 40 минут с прошлого раза, добавляем +1
+        if (diffMinutes > 40) {
+            count++;
+            localStorage.setItem('xenon_u_count', count);
+            localStorage.setItem('xenon_u_time', now);
+        }
 
         document.getElementById('user-count').innerText = count;
-
-        // Раз в 10 секунд рандомно добавляем юзера
-        setInterval(() => {
-            if (Math.random() > 0.5) { // 50% шанс
-                count++;
-                localStorage.setItem('xenon_users', count);
-                document.getElementById('user-count').innerText = count;
-            }
-        }, 10000);
     }
-    initUserCounter();
+    initUserCounter(); // Запускаем 1 раз при старте
 
     // БАЗА ТОВАРОВ
     const products = [
@@ -410,7 +443,6 @@
     let currentProduct = null;
     let selectedPlan = null;
 
-    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     window.switchTab = function(tabName) {
         if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
         
@@ -420,7 +452,6 @@
         document.getElementById(tabName + '-view').classList.add('active');
         document.getElementById('tab-' + tabName).classList.add('active');
 
-        // Скролл наверх
         window.scrollTo({ top: 0, behavior: 'smooth' });
 
         if (tabName !== 'detail') {
@@ -434,7 +465,6 @@
         }
     }
 
-    // РЕНДЕР
     function renderShop() {
         const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
