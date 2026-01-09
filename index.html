@@ -7,15 +7,15 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
-        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; --danger: #ef4444; }
+        :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; --danger: #ef4444; --success: #10b981; }
         
         @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
         .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; font-weight: 800; text-transform: uppercase; }
         
-        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); } 70% { box-shadow: 0 0 0 6px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
 
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
-        .container { padding: 16px; padding-bottom: 80px; }
+        .container { padding: 16px; padding-bottom: 90px; }
         
         /* HEADER */
         .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; backdrop-filter: blur(10px); }
@@ -23,17 +23,16 @@
         .avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff; text-transform: uppercase; }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; } .user-meta div:last-child { font-size: 11px; color: var(--gray); }
         
-        /* КНОПКА НАЗАД */
+        /* КНОПКА НАЗАД (ВЕРХНЯЯ) */
         #back-btn { display: none; font-size: 24px; cursor: pointer; color: var(--accent); margin-right: 10px; transition: 0.2s; }
-        #back-btn:active { transform: scale(0.8); }
-
+        
         .hero { text-align: center; margin: 25px 0; transition: 0.3s; }
         .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0; text-transform: uppercase; letter-spacing: 3px; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 5s linear infinite; }
         .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
 
         /* ВКЛАДКИ */
-        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; text-transform: uppercase; }
+        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); overflow-x: auto; }
+        .nav-tab { flex: 1; text-align: center; padding: 10px 5px; font-size: 11px; font-weight: 700; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; text-transform: uppercase; white-space: nowrap; }
         .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
 
         /* ЭКРАНЫ */
@@ -71,6 +70,10 @@
         .full-width { grid-column: span 2; }
         .rgb-border { animation: border-rgb 3s linear infinite; }
 
+        /* КНОПКА НАЗАД ВНИЗУ */
+        .bottom-back-btn { width: 100%; padding: 12px; margin-top: 20px; background: #222; border: 1px solid #333; border-radius: 10px; text-align: center; font-weight: 700; font-size: 13px; color: #888; cursor: pointer; }
+        .bottom-back-btn:active { background: #333; color: #fff; }
+
         /* --- СТИЛИ ДЛЯ ОЧЕРЕДИ (FREE SOFT) --- */
         .server-status {
             background: rgba(239, 68, 68, 0.1); border: 1px solid var(--danger);
@@ -102,6 +105,20 @@
         }
         .buy-fast-btn:active { transform: scale(0.95); }
 
+        /* --- НОВОСТИ --- */
+        .news-header { text-align: center; font-size: 24px; font-weight: 800; margin-bottom: 20px; font-family: 'Rajdhani', sans-serif; color: #fff; text-transform: uppercase; letter-spacing: 2px; }
+        .changelog-box { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 15px; margin-bottom: 20px; }
+        .cl-title { font-size: 14px; font-weight: 700; color: var(--accent); margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .red-dot { width: 8px; height: 8px; background: #ef4444; border-radius: 50%; display: inline-block; animation: pulse-red 1s infinite; }
+        .cl-item { font-size: 12px; color: #d1d5db; margin-bottom: 5px; padding-left: 10px; border-left: 2px solid #333; }
+        .cl-date { font-size: 10px; color: #666; margin-top: 10px; text-align: right; }
+
+        .total-users {
+            text-align: center; margin-top: 30px; font-family: 'Rajdhani', sans-serif; 
+            font-size: 16px; color: #666; font-weight: 600;
+        }
+        .total-users span { color: var(--success); font-size: 20px; font-weight: 800; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -132,6 +149,7 @@
         <div class="nav-tabs">
             <div class="nav-tab active" id="tab-shop" onclick="switchTab('shop')">МАГАЗИН</div>
             <div class="nav-tab" id="tab-free" onclick="switchTab('free')">БЕСПЛАТНЫЙ СОФТ</div>
+            <div class="nav-tab" id="tab-news" onclick="switchTab('news')">НОВОСТИ</div>
         </div>
 
         <div id="shop-view" class="view active">
@@ -141,18 +159,18 @@
         <div id="free-view" class="view">
             <div class="server-status">
                 <div class="status-dot"></div>
-                <div class="status-text">HIGH LOAD: SERVERS OVERLOADED</div>
+                <div class="status-text">ВНИМАНИЕ: ОЧЕРЕДЬ ПЕРЕГРУЖЕНА</div>
             </div>
 
             <img src="free.png" class="detail-img" alt="Free Soft">
             <div class="detail-title">XENON FREE LITE</div>
             
             <div class="detail-desc">
-                Бесплатная Lite версия. Предназначена для ознакомления.
+                Бесплатная Lite версия. Предназначена для теста или ознакомления.
                 <br><br>
                 ⚠️ <b>Внимание:</b>
-                <br>• Нет защиты от бана (High Risk)
-                <br>• Нет технической поддержки
+                <br>• Слабая защита от бана (Medium Risk)
+                <br>• Небольшой функционал
                 <br>• Обновления выходят с задержкой 7 дней
             </div>
 
@@ -171,12 +189,31 @@
                 <div class="wait-time">Примерное ожидание: ~14 дней</div>
 
                 <div class="queue-desc">
-                    Ключи выдаются в порядке живой очереди. Вы автоматически зарегистрированы в очереди. Количество обновляется каждые 1-2 минуты.
+                    Ключи выдаются в порядке живой очереди. Вы автоматически зарегистрированы. Количество обновляется каждые 1-2 минуты.
+                    <br><br>
+                    Когда настанет ваша очередь, вам предстоит выбрать устройство Android/iOS, и бот отправит ссылку на приватную группу с туториалом.
                 </div>
 
                 <div class="buy-fast-btn" onclick="skipQueue()">
                     ⚡ КУПИТЬ ПРИВАТКУ (БЕЗ ОЧЕРЕДИ)
                 </div>
+            </div>
+        </div>
+
+        <div id="news-view" class="view">
+            <div class="news-header">XENON - НОВОСТИ</div>
+            
+            <div class="changelog-box">
+                <div class="cl-title">ChangeLog: (Последние обновления) <div class="red-dot"></div></div>
+                <div class="cl-item">Обновлен обход античита для Standoff 2 (0.32.0)</div>
+                <div class="cl-item">Улучшен ESP на iOS (не пропадает)</div>
+                <div class="cl-item">Исправлен баг с инжектором на Android 14</div>
+                <div class="cl-item">Добавлены новые сервера для загрузки</div>
+                <div class="cl-date">Сегодня, 14:20</div>
+            </div>
+
+            <div class="total-users">
+                Total users: <span id="user-count">2245</span>
             </div>
         </div>
 
@@ -190,6 +227,8 @@
 
             <div class="section-title">ВЫБЕРИТЕ СРОК ПОДПИСКИ</div>
             <div class="plans-grid" id="plans-grid"></div>
+
+            <div class="bottom-back-btn" onclick="goBack()">ВЕРНУТЬСЯ В МАГАЗИН</div>
         </div>
 
     </div>
@@ -219,7 +258,7 @@
     }
     initProfile();
 
-    // === ЛОГИКА ОЧЕРЕДИ (LIVE) ===
+    // === ЛОГИКА ОЧЕРЕДИ ===
     function initQueueSystem() {
         let startPos = localStorage.getItem('xenon_q_pos');
         let startTime = localStorage.getItem('xenon_q_time');
@@ -233,25 +272,41 @@
 
         const now = Date.now();
         const elapsedMinutes = (now - parseInt(startTime)) / 1000 / 60;
-        
-        // СКОРОСТЬ: 1 человек каждые 2 минуты
         const movedSpots = Math.floor(elapsedMinutes / 2); 
-        
         let currentPos = parseInt(startPos) - movedSpots;
         if (currentPos < 100) currentPos = 142; 
 
         document.getElementById('queue-pos').innerText = currentPos;
     }
-
-    // Запускаем проверку каждую 1 секунду
     setInterval(initQueueSystem, 1000);
     initQueueSystem();
 
-
     function skipQueue() {
         switchTab('shop');
+        // Фикс скролла
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         tg.HapticFeedback.notificationOccurred('success');
     }
+
+    // === СЧЕТЧИК ЮЗЕРОВ ===
+    function initUserCounter() {
+        // Берем сохраненное или ставим базу 2240
+        let count = localStorage.getItem('xenon_users');
+        if (!count) count = 2240;
+        count = parseInt(count);
+
+        document.getElementById('user-count').innerText = count;
+
+        // Раз в 10 секунд рандомно добавляем юзера
+        setInterval(() => {
+            if (Math.random() > 0.5) { // 50% шанс
+                count++;
+                localStorage.setItem('xenon_users', count);
+                document.getElementById('user-count').innerText = count;
+            }
+        }, 10000);
+    }
+    initUserCounter();
 
     // БАЗА ТОВАРОВ
     const products = [
@@ -260,20 +315,22 @@
             name: 'Xenon Android No Root', 
             badge: 'NO ROOT',
             img: 'noroot.png',
-            short_desc: 'Legit & Rage настройки. Полный Undetected 2026.',
+            short_desc: 'Legit & Rage настройки. Полный Undetected 2026 Работающий БЕЗ Рут-прав.',
             full_desc: `
                 Лучший чит, работающий на <b>низкоуровневых драйверах</b>, что позволяет играть <b>БЕЗ РУТ ПРАВ</b>.
                 <br><br>
                 🚀 <b>После оплаты вы получите:</b>
                 <br>• Индивидуальный ключ активации
                 <br>• Видео-гайд по установке
-                <br>• Доступ в VIP-чат с пользователями
-                <br>• Помощь модераторов 24/7
+                <br>• Доступ в ПРИВАТНЫЙ-чат с пользователями
+                <br>• Помощь модераторов в приватном чате 24/7
+                <br>• Единственный правильно-сертифицированный инжектор работающий БЕЗ Рут прав, шанс на нерабочий продукт - крайне минимален.
             `,
             features: ["Aimbot (Legit / Rage)", "ESP / Wallhack", "SkinChanger", "Radar Hack", "No Recoil"],
             plans: [
                 { label: '7 Дней', price: 150 },
                 { label: '30 Дней', price: 450 },
+                { label: '90 Дней', price: 1100 },
                 { label: 'НАВСЕГДА', price: 2500, special: true }
             ]
         },
@@ -282,18 +339,23 @@
             name: 'Xenon iOS Private', 
             badge: 'NO JAIL',
             img: 'ios.png',
-            short_desc: 'Приватная версия для iPhone/iPad. Без Jailbreak.',
+            short_desc: 'Legit & Rage настройки. Работает на всех версиях iPhone/iPad. Без Jailbreak.',
             full_desc: `
-                Приватный софт для iOS. Установка через TestFlight или IPA. 
+                Приватный софт для iOS. Установка через eSign, Sideloadly. Софт выдается IPA файлом, единственный рабочий iPA с лицензированным и подписанным соглашением, шанс что будет не рабочий практически нулевой.
                 <br><br>
                 💎 <b>Преимущества:</b>
                 <br>• Не нужен Jailbreak
-                <br>• Stream Proof (Скрыт на записи)
-                <br>• Индивидуальный сертификат
+                <br>• Overlay (Скрыт на записи)
+                <br>• Индивидуальный ключ к софту
+                <br>• К товару в подарок идет сертификат для подписи приложений eSign/Sidelodly
+                <br>• Доступ в ПРИВАТНЫЙ-чат с пользователями
+                <br>• Помощь модераторов в приватном чате 24/7
             `,
             features: ["Silent Aim", "ESP Skeleton", "Visible Check", "Stream Proof", "Auto Fire"],
             plans: [
+                { label: '7 Дней', price: 450 },
                 { label: '30 Дней', price: 1200 },
+                { label: '90 Дней', price: 2800 },
                 { label: 'НАВСЕГДА', price: 4500, special: true }
             ]
         },
@@ -302,7 +364,7 @@
             name: 'Xenon Android ROOT', 
             badge: 'ROOT ACCESS',
             img: 'root.png',
-            short_desc: 'External версия для рутированных устройств. Максимум возможностей.',
+            short_desc: 'External версия для рутированных устройств. Максимум возможностей, Самый лучший Антибан.',
             full_desc: `
                 Мощнейший External чит для устройств с <b>ROOT правами</b>. Читает память игры напрямую.
                 <br><br>
@@ -310,9 +372,11 @@
                 <br>• Нулевой риск бана (External)
                 <br>• Максимальная производительность
                 <br>• Работает поверх игры (Overlay)
+                <br>• Именно у Xenon улучшенные технологии External Версии, для Legit игры - шанс бана нулевой.
             `,
             features: ["External Menu", "Kernel Driver", "Silent Aim v2", "Chams (Glow)", "No Recoil 100%"],
             plans: [
+                { label: '7 Дней', price: 250 },
                 { label: '30 Дней', price: 650 },
                 { label: '90 Дней', price: 1500 },
                 { label: 'НАВСЕГДА', price: 3000, special: true }
@@ -323,19 +387,21 @@
             name: 'Xenon PC Version', 
             badge: 'PC / EMULATOR',
             img: 'pc.png',
-            short_desc: 'Для эмуляторов и PC версии. Встроенный Spoofer.',
+            short_desc: 'Для эмуляторов и PC версии. Встроенный Spoofer Для Bluestacks/MSI Bluestacks.',
             full_desc: `
                 Приватный софт для игры с компьютера (Эмуляторы LDPlayer, BlueStacks).
                 <br><br>
                 🖥 <b>Особенности ПК версии:</b>
                 <br>• Встроенный HWID Spoofer (Снимает бан по железу)
                 <br>• Удобное меню на Insert
+                <br>• Работает через ADB в Эмуляторе, это даёт гарантию нулевого детекта античитом.
                 <br>• Тонкая настройка Aimbot
             `,
             features: ["HWID Spoofer", "Humanized Aimbot", "ESP Glow", "TriggerBot", "BunnyHop"],
             plans: [
-                { label: '24 Часа', price: 100 },
+                { label: '7 Дней', price: 300 },
                 { label: '30 Дней', price: 800 },
+                { label: '90 Дней', price: 1900 },
                 { label: 'НАВСЕГДА', price: 3500, special: true }
             ]
         }
@@ -353,6 +419,9 @@
 
         document.getElementById(tabName + '-view').classList.add('active');
         document.getElementById('tab-' + tabName).classList.add('active');
+
+        // Скролл наверх
+        window.scrollTo({ top: 0, behavior: 'smooth' });
 
         if (tabName !== 'detail') {
             document.getElementById('back-btn').style.display = 'none';
@@ -424,7 +493,8 @@
         document.getElementById('detail-view').classList.add('active');
         document.getElementById('back-btn').style.display = 'block';
         document.getElementById('main-hero').style.display = 'none';
-        window.scrollTo(0, 0);
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function selectPlan(index) {
