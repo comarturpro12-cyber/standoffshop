@@ -6,11 +6,11 @@
     <title>Xenon Standoff</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* ТВОЙ СТИЛЬ (Оставил без изменений) */
+        /* СТИЛИ КАК В ТВОЕЙ БАЗЕ */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
         :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; }
         @keyframes rgb-flow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes border-rgb { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } 25% { border-color: #00ff00; } 50% { border-color: #0000ff; } 100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } }
+        @keyframes border-rgb { 0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } 50% { border-color: #0000ff; } 100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); } }
         .rgb-text { background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 3s linear infinite; font-weight: 800; text-transform: uppercase; }
         body { background-color: var(--bg); color: var(--text); font-family: 'Inter', sans-serif; margin: 0; padding: 0; overflow-x: hidden; min-height: 100vh; background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%); }
         .container { padding: 16px; padding-bottom: 80px; }
@@ -63,12 +63,16 @@
                 <div style="font-size:10px; color:#666;">Xenon Server</div>
             </div>
         </div>
+
         <div class="hero"><h1>XENON</h1><p>Premium Undetected Software</p></div>
+
         <div class="nav-tabs">
             <div class="nav-tab active" onclick="switchTab('shop')">МАГАЗИН</div>
             <div class="nav-tab" onclick="switchTab('features')">ФУНКЦИОНАЛ</div>
         </div>
+
         <div id="shop" class="section active"><div class="grid" id="grid"></div></div>
+
         <div id="features" class="section">
             <div class="info-block"><div style="font-weight:bold;color:#fff;margin-bottom:5px;">ℹ ВАЖНО</div><div style="font-size:12px;color:#93c5fd;">Функционал на iOS и Android No Root одинаков.</div></div>
             <div class="feature-group"><div class="group-header">🎯 Aimbot</div><div class="group-content"><ul class="f-list"><li>Aim Enable</li><li>Target Bone</li></ul></div></div>
@@ -78,28 +82,23 @@
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-
-    // --- ФИКС ПРОФИЛЯ ---
+    
+    // --- ЗАПОЛНЕНИЕ ПРОФИЛЯ ---
     function initProfile() {
-        // Пытаемся взять данные
         const user = tg.initDataUnsafe.user;
-        
         if (user) {
-            // Если данные есть - заполняем
             document.getElementById('username').innerText = user.first_name || "User";
             document.getElementById('userid').innerText = `ID: ${user.id}`;
             const initial = user.first_name ? user.first_name[0] : 'X';
             document.getElementById('avatar').innerText = initial.toUpperCase();
         } else {
-            // Если данных нет (Guest Mode)
+            // Если открыто по ссылке, а не кнопкой
             document.getElementById('username').innerText = "Guest Mode";
-            document.getElementById('userid').innerText = "Open via Telegram";
+            document.getElementById('userid').innerText = "Open via Button";
         }
     }
-
-    // Запускаем сразу и еще раз через 100мс (на случай если телеграм тупит)
+    // Вызываем сразу
     initProfile();
-    setTimeout(initProfile, 100);
 
     const products = [
         { id: 1, type: 'android', name: 'Xenon Android No Root', price: 450, desc: 'Legit & Rage настройки. Полный Undetected 2026. <span class="rgb-text">НАВСЕГДА</span>.', img: 'noroot.png', badge: 'NO ROOT' },
@@ -147,12 +146,12 @@
         renderProducts();
     }
 
-    // --- ФИКС КНОПКИ (ОБЯЗАТЕЛЬНО) ---
+    // --- ОТПРАВКА ДАННЫХ И ЗАКРЫТИЕ ---
     tg.MainButton.onClick(() => {
         const p = products.find(x => x.id === selected);
         if (p) {
             tg.sendData(JSON.stringify(p));
-            // Закрываем с задержкой, чтобы данные улетели
+            // Закрываем окно, чтобы вернуться в бот
             setTimeout(() => { tg.close(); }, 100);
         }
     });
