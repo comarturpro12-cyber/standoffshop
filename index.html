@@ -29,11 +29,9 @@
         .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0; text-transform: uppercase; letter-spacing: 3px; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 5s linear infinite; }
         .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
 
-        /* ВКЛАДКИ (NAV-TABS) */
+        /* ВКЛАДКИ */
         .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; }
-        
-        /* Активная вкладка (МАГАЗИН) */
+        .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 12px; font-weight: 700; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; text-transform: uppercase; }
         .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
 
         /* ЭКРАНЫ */
@@ -63,15 +61,12 @@
         }
         .detail-desc b { color: #fff; }
 
-        /* ЗАГОЛОВКИ СЕКЦИЙ */
         .section-title { font-size: 12px; color: var(--gray); text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; margin-top: 20px; border-bottom: 1px solid #333; padding-bottom: 5px; }
 
-        /* ФУНКЦИОНАЛ */
         .features-list { margin-bottom: 10px; }
         .feature-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; color: #9ca3af; }
         .feature-icon { color: var(--accent); font-weight: bold; font-size: 16px; }
 
-        /* ТАРИФЫ */
         .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .plan-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
         .plan-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); transform: scale(1.02); }
@@ -79,6 +74,9 @@
         .plan-price { font-size: 16px; font-family: 'Rajdhani', sans-serif; color: var(--accent); font-weight: 800; }
         .full-width { grid-column: span 2; }
         .rgb-border { animation: border-rgb 3s linear infinite; }
+
+        /* ЗАГЛУШКА ДЛЯ БЕСПЛАТНОГО */
+        .empty-state { text-align: center; padding: 40px 20px; color: #555; font-size: 14px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -107,17 +105,25 @@
             <p>Premium Undetected Software</p>
         </div>
 
+        <div class="nav-tabs">
+            <div class="nav-tab active" id="tab-shop" onclick="switchTab('shop')">МАГАЗИН</div>
+            <div class="nav-tab" id="tab-free" onclick="switchTab('free')">БЕСПЛАТНЫЙ СОФТ</div>
+        </div>
+
         <div id="shop-view" class="view active">
-            <div class="nav-tabs">
-                <div class="nav-tab active">МАГАЗИН</div>
-                </div>
             <div class="grid" id="products-grid"></div>
+        </div>
+
+        <div id="free-view" class="view">
+            <div class="empty-state">
+                <div style="font-size: 30px; margin-bottom: 10px;">🎁</div>
+                Раздел в разработке.<br>Скоро здесь появится бесплатный софт.
+            </div>
         </div>
 
         <div id="detail-view" class="view">
             <img id="d-img" src="" class="detail-img">
             <div id="d-title" class="detail-title"></div>
-            
             <div id="d-desc" class="detail-desc"></div>
             
             <div class="section-title">ФУНКЦИОНАЛ</div>
@@ -154,65 +160,92 @@
     }
     initProfile();
 
-    // --- БАЗА ТОВАРОВ ---
+    // --- БАЗА ТОВАРОВ (4 ШТУКИ) ---
     const products = [
         { 
-            id: 'android', 
+            id: 'android_noroot', 
             name: 'Xenon Android No Root', 
             badge: 'NO ROOT',
             img: 'noroot.png',
             short_desc: 'Legit & Rage настройки. Полный Undetected 2026.',
-            // ТВОЕ ПРОДАЮЩЕЕ ОПИСАНИЕ
             full_desc: `
                 Лучший чит, работающий на <b>низкоуровневых драйверах</b>, что позволяет играть <b>БЕЗ РУТ ПРАВ</b>.
                 <br><br>
                 🚀 <b>После оплаты вы получите:</b>
                 <br>• Индивидуальный ключ активации
-                <br>• Видео-гайд по установке и запуску
+                <br>• Видео-гайд по установке
                 <br>• Доступ в VIP-чат с пользователями
-                <br>• Помощь модераторов 24/7 с любыми вопросами
+                <br>• Помощь модераторов 24/7
             `,
-            features: [
-                "Aimbot (Legit / Rage / Silent)",
-                "ESP / Wallhack (Box, Line, Skeleton)",
-                "SkinChanger (Все скины, ножи, перчатки)",
-                "Radar Hack",
-                "No Recoil / No Spread",
-                "Flash & Smoke Remove"
-            ],
+            features: ["Aimbot (Legit / Rage)", "ESP / Wallhack", "SkinChanger", "Radar Hack", "No Recoil"],
             plans: [
                 { label: '7 Дней', price: 150 },
-                { label: '14 Дней', price: 250 },
                 { label: '30 Дней', price: 450 },
-                { label: '90 Дней', price: 1100 },
                 { label: 'НАВСЕГДА', price: 2500, special: true }
             ]
         },
         { 
-            id: 'ios', 
+            id: 'ios_private', 
             name: 'Xenon iOS Private', 
             badge: 'NO JAIL',
             img: 'ios.png',
             short_desc: 'Приватная версия для iPhone/iPad. Без Jailbreak.',
             full_desc: `
-                Приватный софт для iOS устройств. Установка через TestFlight или прямым IPA файлом. 
+                Приватный софт для iOS. Установка через TestFlight или IPA. 
                 <br><br>
                 💎 <b>Преимущества:</b>
-                <br>• Полная безопасность (Undetected)
-                <br>• Не требует Jailbreak
-                <br>• Обход записи экрана (Stream Proof)
-                <br>• Индивидуальный сертификат в комплекте
+                <br>• Не нужен Jailbreak
+                <br>• Stream Proof (Скрыт на записи)
+                <br>• Индивидуальный сертификат
             `,
-            features: [
-                "Silent Aim (Magic Bullet)",
-                "ESP Skeleton & Box",
-                "Visible Check",
-                "Stream Proof (Скрыт на записи)",
-                "Auto Fire / Triggerbot"
-            ],
+            features: ["Silent Aim", "ESP Skeleton", "Visible Check", "Stream Proof", "Auto Fire"],
             plans: [
                 { label: '30 Дней', price: 1200 },
                 { label: 'НАВСЕГДА', price: 4500, special: true }
+            ]
+        },
+        // НОВЫЙ ТОВАР 1: ROOT
+        { 
+            id: 'android_root', 
+            name: 'Xenon Android ROOT', 
+            badge: 'ROOT ACCESS',
+            img: 'root.png',
+            short_desc: 'External версия для рутированных устройств. Максимум возможностей.',
+            full_desc: `
+                Мощнейший External чит для устройств с <b>ROOT правами</b>. Читает память игры напрямую, не инжектится внутрь.
+                <br><br>
+                ⚡ <b>Почему Root версия?</b>
+                <br>• Нулевой риск бана (External)
+                <br>• Максимальная производительность
+                <br>• Работает поверх игры (Overlay)
+            `,
+            features: ["External Menu", "Kernel Driver", "Silent Aim v2", "Chams (Glow)", "No Recoil 100%"],
+            plans: [
+                { label: '30 Дней', price: 650 },
+                { label: '90 Дней', price: 1500 },
+                { label: 'НАВСЕГДА', price: 3000, special: true }
+            ]
+        },
+        // НОВЫЙ ТОВАР 2: PC
+        { 
+            id: 'pc_version', 
+            name: 'Xenon PC Version', 
+            badge: 'PC / EMULATOR',
+            img: 'pc.png',
+            short_desc: 'Для эмуляторов и PC версии. Встроенный Spoofer.',
+            full_desc: `
+                Приватный софт для игры с компьютера (Эмуляторы LDPlayer, BlueStacks и др).
+                <br><br>
+                🖥 <b>Особенности ПК версии:</b>
+                <br>• Встроенный HWID Spoofer (Снимает бан по железу)
+                <br>• Удобное меню на Insert
+                <br>• Тонкая настройка Aimbot под мышку
+            `,
+            features: ["HWID Spoofer", "Humanized Aimbot", "ESP Glow", "TriggerBot", "BunnyHop"],
+            plans: [
+                { label: '24 Часа', price: 100 },
+                { label: '30 Дней', price: 800 },
+                { label: 'НАВСЕГДА', price: 3500, special: true }
             ]
         }
     ];
@@ -220,7 +253,27 @@
     let currentProduct = null;
     let selectedPlan = null;
 
-    // РЕНДЕР
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
+    window.switchTab = function(tabName) {
+        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        
+        // Скрываем все вьюшки
+        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+
+        // Показываем нужную
+        document.getElementById(tabName + '-view').classList.add('active');
+        document.getElementById('tab-' + tabName).classList.add('active');
+
+        // Сбрасываем деталку если была открыта
+        if (tabName !== 'detail') {
+            document.getElementById('back-btn').style.display = 'none';
+            document.getElementById('main-hero').style.display = 'block';
+            tg.MainButton.hide();
+        }
+    }
+
+    // РЕНДЕР ТОВАРОВ
     function renderShop() {
         const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
@@ -243,7 +296,8 @@
         });
     }
 
-    function openDetail(id) {
+    // ОТКРЫТИЕ ДЕТАЛКИ
+    window.openDetail = function(id) {
         currentProduct = products.find(x => x.id === id);
         selectedPlan = null;
         tg.MainButton.hide();
@@ -277,13 +331,16 @@
             plansContainer.appendChild(btn);
         });
 
-        document.getElementById('shop-view').classList.remove('active');
+        // ПЕРЕХОД НА ЭКРАН
+        document.querySelectorAll('.view').forEach(el => el.classList.remove('active'));
         document.getElementById('detail-view').classList.add('active');
+        
         document.getElementById('back-btn').style.display = 'block';
         document.getElementById('main-hero').style.display = 'none';
         window.scrollTo(0, 0);
     }
 
+    // ВЫБОР ТАРИФА
     function selectPlan(index) {
         if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         
@@ -298,17 +355,18 @@
         tg.MainButton.show();
     }
 
+    // НАЗАД
     window.goBack = function() {
         if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
-        document.getElementById('detail-view').classList.remove('active');
-        document.getElementById('shop-view').classList.add('active');
-        document.getElementById('back-btn').style.display = 'none';
-        document.getElementById('main-hero').style.display = 'block';
+        
+        // Возвращаемся в магазин
+        switchTab('shop');
         tg.MainButton.hide();
         currentProduct = null;
         selectedPlan = null;
     }
 
+    // ОТПРАВКА БОТУ
     tg.MainButton.onClick(() => {
         if (currentProduct && selectedPlan) {
             const finalData = {
@@ -322,6 +380,7 @@
 
     tg.BackButton.onClick(goBack);
     renderShop();
+
 </script>
 </body>
 </html>
