@@ -171,7 +171,7 @@
                 <div class="wait-time">Примерное ожидание: ~14 дней</div>
 
                 <div class="queue-desc">
-                    Ключи выдаются в порядке живой очереди. Не закрывайте страницу, чтобы не потерять место.
+                    Ключи выдаются в порядке живой очереди. Вы автоматически зарегистрированы в очереди. Количество обновляется каждые 1-2 минуты.
                 </div>
 
                 <div class="buy-fast-btn" onclick="skipQueue()">
@@ -219,7 +219,7 @@
     }
     initProfile();
 
-    // === ЛОГИКА ОЧЕРЕДИ ===
+    // === ЛОГИКА ОЧЕРЕДИ (LIVE) ===
     function initQueueSystem() {
         let startPos = localStorage.getItem('xenon_q_pos');
         let startTime = localStorage.getItem('xenon_q_time');
@@ -234,16 +234,20 @@
         const now = Date.now();
         const elapsedMinutes = (now - parseInt(startTime)) / 1000 / 60;
         
-        // Скорость: 1 чел в 5 минут
-        const movedSpots = Math.floor(elapsedMinutes / 5); 
+        // СКОРОСТЬ: 1 человек каждые 2 минуты
+        const movedSpots = Math.floor(elapsedMinutes / 2); 
         
         let currentPos = parseInt(startPos) - movedSpots;
-        if (currentPos < 100) currentPos = 142; // Не опускаем ниже 142
+        if (currentPos < 100) currentPos = 142; 
 
         document.getElementById('queue-pos').innerText = currentPos;
     }
 
-    // Пропуск очереди -> Идем в магазин
+    // Запускаем проверку каждую 1 секунду
+    setInterval(initQueueSystem, 1000);
+    initQueueSystem();
+
+
     function skipQueue() {
         switchTab('shop');
         tg.HapticFeedback.notificationOccurred('success');
