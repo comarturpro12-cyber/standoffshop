@@ -6,7 +6,6 @@
     <title>Xenon Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        /* --- СТИЛИ (Твоя база) --- */
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
         :root { --bg: #050505; --card: #0f0f11; --border: #27272a; --accent: #3b82f6; --text: #ffffff; --gray: #9ca3af; }
         
@@ -22,45 +21,55 @@
         .avatar { width: 40px; height: 40px; border-radius: 8px; background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3); background-size: 400% 400%; animation: rgb-flow 8s ease infinite; display: flex; align-items: center; justify-content: center; font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff; text-transform: uppercase; }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; } .user-meta div:last-child { font-size: 11px; color: var(--gray); }
         
-        /* КНОПКА НАЗАД (Скрыта по умолчанию) */
-        #back-btn { display: none; font-size: 24px; cursor: pointer; color: var(--accent); margin-right: 10px; }
+        /* НАВИГАЦИЯ */
+        #back-btn { display: none; font-size: 24px; cursor: pointer; color: var(--accent); margin-right: 10px; transition: 0.2s; }
+        #back-btn:active { transform: scale(0.8); }
 
-        .hero { text-align: center; margin: 25px 0; }
+        .hero { text-align: center; margin: 25px 0; transition: 0.3s; }
         .hero h1 { font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0; text-transform: uppercase; letter-spacing: 3px; background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000); background-size: 400%; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: rgb-flow 5s linear infinite; }
         .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
-
-        /* НАВИГАЦИЯ */
-        .nav-tabs { display: flex; background: var(--card); border-radius: 12px; padding: 4px; margin-bottom: 25px; border: 1px solid var(--border); }
-        .nav-tab { flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600; border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s; }
-        .nav-tab.active { background: linear-gradient(90deg, #3b82f6, #8b5cf6); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
 
         /* ЭКРАНЫ */
         .view { display: none; animation: fadeIn 0.3s ease; }
         .view.active { display: block; }
 
-        /* КАРТОЧКИ ТОВАРОВ (Главная) */
+        /* КАРТОЧКИ ГЛАВНАЯ */
         .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; }
+        .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s; }
+        .card:active { transform: scale(0.98); }
         .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
         .card-body { padding: 16px; }
         .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
         .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
-        .go-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; color: #fff; cursor: pointer; transition: 0.2s; }
-        .go-btn:active { transform: scale(0.95); background: var(--accent); }
-        .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
+        .go-btn { padding: 10px 20px; background: rgba(59, 130, 246, 0.1); border: 1px solid var(--accent); border-radius: 8px; font-size: 12px; font-weight: 700; color: var(--accent); cursor: pointer; transition: 0.2s; letter-spacing: 1px; }
+        .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.8); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
 
         /* ДЕТАЛЬНАЯ СТРАНИЦА */
-        .detail-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); }
-        .detail-title { font-size: 24px; font-weight: 800; color: #fff; margin-bottom: 10px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; }
-        .detail-desc { font-size: 13px; color: #d1d5db; line-height: 1.6; margin-bottom: 25px; background: rgba(255,255,255,0.03); padding: 15px; border-radius: 12px; border: 1px solid var(--border); }
+        .detail-img { width: 100%; height: 200px; object-fit: cover; border-radius: 16px; margin-bottom: 20px; border: 1px solid var(--border); box-shadow: 0 5px 20px rgba(0,0,0,0.5); }
+        .detail-title { font-size: 26px; font-weight: 800; color: #fff; margin-bottom: 15px; text-transform: uppercase; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; }
         
+        .detail-desc { 
+            font-size: 13px; color: #d1d5db; line-height: 1.6; margin-bottom: 20px; 
+            background: rgba(255,255,255,0.02); padding: 15px; border-radius: 12px; 
+            border: 1px solid var(--border); 
+        }
+        .detail-desc b { color: #fff; }
+
+        /* СПИСОК ФУНКЦИЙ */
+        .features-list { margin-bottom: 25px; }
+        .feature-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; font-size: 13px; color: #9ca3af; }
+        .feature-icon { color: var(--accent); font-weight: bold; font-size: 16px; }
+
+        /* ТАРИФЫ */
+        .plans-title { font-size: 12px; color: var(--gray); text-transform: uppercase; font-weight: 700; margin-bottom: 10px; letter-spacing: 1px; }
         .plans-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
         .plan-card { background: var(--card); border: 1px solid var(--border); padding: 15px; border-radius: 12px; text-align: center; cursor: pointer; transition: 0.3s; position: relative; overflow: hidden; }
-        .plan-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.1); box-shadow: 0 0 15px rgba(59, 130, 246, 0.2); transform: scale(1.02); }
+        .plan-card.active { border-color: var(--accent); background: rgba(59, 130, 246, 0.15); box-shadow: 0 0 15px rgba(59, 130, 246, 0.3); transform: scale(1.02); }
         .plan-duration { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
         .plan-price { font-size: 16px; font-family: 'Rajdhani', sans-serif; color: var(--accent); font-weight: 800; }
         .full-width { grid-column: span 2; }
+        .rgb-border { animation: border-rgb 3s linear infinite; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -72,7 +81,6 @@
         <div class="header">
             <div class="user-box">
                 <div id="back-btn" onclick="goBack()">‹</div>
-                
                 <div class="avatar" id="avatar">X</div>
                 <div class="user-meta">
                     <div id="username">Guest</div>
@@ -91,21 +99,20 @@
         </div>
 
         <div id="shop-view" class="view active">
-            <div class="nav-tabs">
-                <div class="nav-tab active">МАГАЗИН</div>
-                <div class="nav-tab" style="opacity: 0.5;">ФУНКЦИОНАЛ</div>
-            </div>
             <div class="grid" id="products-grid"></div>
         </div>
 
         <div id="detail-view" class="view">
             <img id="d-img" src="" class="detail-img">
             <div id="d-title" class="detail-title"></div>
+            
             <div id="d-desc" class="detail-desc"></div>
             
-            <div style="margin-bottom: 10px; font-size: 12px; color: var(--gray); text-transform: uppercase; font-weight: 700;">Выберите срок подписки:</div>
-            <div class="plans-grid" id="plans-grid">
-                </div>
+            <div class="plans-title">ФУНКЦИОНАЛ</div>
+            <div id="d-features" class="features-list"></div>
+
+            <div class="plans-title">ВЫБЕРИТЕ СРОК ПОДПИСКИ</div>
+            <div class="plans-grid" id="plans-grid"></div>
         </div>
 
     </div>
@@ -114,7 +121,7 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // --- ПРОФИЛЬ (Железная ссылка) ---
+    // ПРОФИЛЬ
     function initProfile() {
         const urlParams = new URLSearchParams(window.location.search);
         const nameFromUrl = urlParams.get('name');
@@ -135,7 +142,7 @@
     }
     initProfile();
 
-    // --- БАЗА ТОВАРОВ И ТАРИФОВ ---
+    // --- НАСТРОЙКА ТОВАРОВ ---
     const products = [
         { 
             id: 'android', 
@@ -143,13 +150,30 @@
             badge: 'NO ROOT',
             img: 'noroot.png',
             short_desc: 'Legit & Rage настройки. Полный Undetected 2026.',
-            full_desc: 'Мощный чит для Android без рут прав. Включает в себя Aimbot, ESP, Skinchanger и Radar. Полностью безопасен для основы.',
+            // ТВОЙ НОВЫЙ ТЕКСТ
+            full_desc: `
+                Лучший чит, работающий на <b>низкоуровневых драйверах</b>, что позволяет играть <b>БЕЗ РУТ ПРАВ</b>.
+                <br><br>
+                🚀 <b>После оплаты вы получите:</b>
+                <br>• Индивидуальный ключ активации
+                <br>• Видео-гайд по установке и запуску
+                <br>• Доступ в VIP-чат с пользователями
+                <br>• Помощь модераторов 24/7 с любыми вопросами
+            `,
+            // СПИСОК ФУНКЦИЙ
+            features: [
+                "Aimbot (Legit & Rage)",
+                "ESP / Wallhack (Игроки, Оружие)",
+                "SkinChanger (Ножи, Перчатки)",
+                "Radar Hack",
+                "No Recoil / No Spread"
+            ],
             plans: [
                 { label: '7 Дней', price: 150 },
                 { label: '14 Дней', price: 250 },
                 { label: '30 Дней', price: 450 },
                 { label: '90 Дней', price: 1100 },
-                { label: 'НАВСЕГДА', price: 2500, special: true } // special делает кнопку широкой
+                { label: 'НАВСЕГДА', price: 2500, special: true }
             ]
         },
         { 
@@ -158,7 +182,22 @@
             badge: 'NO JAIL',
             img: 'ios.png',
             short_desc: 'Приватная версия для iPhone/iPad. Без Jailbreak.',
-            full_desc: 'Эксклюзивный софт для iOS. Установка через TestFlight или прямым IPA. Не требует джейлбрейка. Встроенный обход записи экрана.',
+            full_desc: `
+                Приватный софт для iOS устройств. Работает через TestFlight, установка за 5 минут. 
+                <br><br>
+                💎 <b>Преимущества:</b>
+                <br>• Не нужен Jailbreak
+                <br>• Не греет телефон
+                <br>• Обход записи экрана (Stream Proof)
+                <br>• Индивидуальный сертификат
+            `,
+            features: [
+                "Silent Aim",
+                "ESP Skeleton & Box",
+                "Visible Check",
+                "Stream Proof",
+                "Auto Fire"
+            ],
             plans: [
                 { label: '30 Дней', price: 1200 },
                 { label: 'НАВСЕГДА', price: 4500, special: true }
@@ -169,7 +208,7 @@
     let currentProduct = null;
     let selectedPlan = null;
 
-    // --- РЕНДЕР ГЛАВНОЙ СТРАНИЦЫ ---
+    // РЕНДЕР ГЛАВНОЙ
     function renderShop() {
         const grid = document.getElementById('products-grid');
         grid.innerHTML = '';
@@ -192,24 +231,32 @@
         });
     }
 
-    // --- ОТКРЫТЬ ТОВАР ---
+    // ОТКРЫТИЕ КАРТОЧКИ
     window.openDetail = function(id) {
         currentProduct = products.find(x => x.id === id);
         selectedPlan = null;
-        tg.MainButton.hide(); // Скрываем кнопку покупки пока не выбран тариф
+        tg.MainButton.hide();
 
-        // Заполняем инфу
         document.getElementById('d-img').src = currentProduct.img;
         document.getElementById('d-title').innerText = currentProduct.name;
-        document.getElementById('d-desc').innerText = currentProduct.full_desc;
+        document.getElementById('d-desc').innerHTML = currentProduct.full_desc; // Используем innerHTML для тегов <br>
 
-        // Генерируем кнопки тарифов
+        // Рендер функций
+        const featureContainer = document.getElementById('d-features');
+        featureContainer.innerHTML = '';
+        currentProduct.features.forEach(feat => {
+            const el = document.createElement('div');
+            el.className = 'feature-item';
+            el.innerHTML = `<span class="feature-icon">✓</span> ${feat}`;
+            featureContainer.appendChild(el);
+        });
+
+        // Рендер тарифов
         const plansContainer = document.getElementById('plans-grid');
         plansContainer.innerHTML = '';
-        
         currentProduct.plans.forEach((plan, index) => {
             const btn = document.createElement('div');
-            btn.className = `plan-card ${plan.special ? 'full-width' : ''}`;
+            btn.className = `plan-card ${plan.special ? 'full-width rgb-border' : ''}`;
             btn.onclick = () => selectPlan(index);
             btn.id = `plan-${index}`;
             btn.innerHTML = `
@@ -219,32 +266,29 @@
             plansContainer.appendChild(btn);
         });
 
-        // Переключаем вид
         document.getElementById('shop-view').classList.remove('active');
         document.getElementById('detail-view').classList.add('active');
         document.getElementById('back-btn').style.display = 'block';
-        document.getElementById('main-hero').style.display = 'none'; // Скрываем большой заголовок
+        document.getElementById('main-hero').style.display = 'none';
+        window.scrollTo(0, 0);
     }
 
-    // --- ВЫБРАТЬ ТАРИФ ---
+    // ВЫБОР ТАРИФА
     function selectPlan(index) {
         if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
         
-        // Убираем выделение со всех
         document.querySelectorAll('.plan-card').forEach(el => el.classList.remove('active'));
-        // Добавляем новому
         document.getElementById(`plan-${index}`).classList.add('active');
 
         selectedPlan = currentProduct.plans[index];
 
-        // Показываем ГЛАВНУЮ КНОПКУ
         tg.MainButton.text = `КУПИТЬ ЗА ${selectedPlan.price}₽`;
         tg.MainButton.color = "#3b82f6";
         tg.MainButton.textColor = "#fff";
         tg.MainButton.show();
     }
 
-    // --- НАЗАД ---
+    // НАЗАД
     window.goBack = function() {
         if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
         document.getElementById('detail-view').classList.remove('active');
@@ -256,11 +300,9 @@
         selectedPlan = null;
     }
 
-    // --- ОТПРАВКА БОТУ ---
+    // ОТПРАВКА БОТУ
     tg.MainButton.onClick(() => {
         if (currentProduct && selectedPlan) {
-            // Формируем красивое название для чека
-            // Например: "Xenon Android No Root (30 Дней)"
             const finalData = {
                 name: `${currentProduct.name} (${selectedPlan.label})`,
                 price: selectedPlan.price
@@ -271,9 +313,7 @@
         }
     });
 
-    // Обработка кнопки "Назад" на Андроиде
     tg.BackButton.onClick(goBack);
-
     renderShop();
 
 </script>
