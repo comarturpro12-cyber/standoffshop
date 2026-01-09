@@ -12,9 +12,27 @@
             --bg: #050505;
             --card: #0f0f11;
             --border: #27272a;
-            --accent: #3b82f6; /* Xenon Blue */
+            --accent: #3b82f6;
             --text: #ffffff;
             --gray: #9ca3af;
+        }
+
+        /* --- RGB АНИМАЦИИ --- */
+        @keyframes rgb-flow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes border-rgb {
+            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
+            14% { border-color: #ff7f00; box-shadow: 0 0 15px rgba(255,127,0,0.4); }
+            28% { border-color: #ffff00; box-shadow: 0 0 15px rgba(255,255,0,0.4); }
+            42% { border-color: #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.4); }
+            56% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0,0,255,0.4); }
+            70% { border-color: #4b0082; box-shadow: 0 0 15px rgba(75,0,130,0.4); }
+            85% { border-color: #9400d3; box-shadow: 0 0 15px rgba(148,0,211,0.4); }
+            100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
         }
 
         body {
@@ -25,8 +43,7 @@
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
             min-height: 100vh;
-            /* Синий неон фон */
-            background-image: radial-gradient(circle at 50% -20%, #1e3a8a 0%, #050505 50%);
+            background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%);
         }
 
         .container { padding: 16px; padding-bottom: 80px; }
@@ -41,24 +58,33 @@
         .user-box { display: flex; align-items: center; gap: 10px; }
         .avatar {
             width: 40px; height: 40px; border-radius: 8px;
-            background: linear-gradient(135deg, var(--accent), #1d4ed8);
+            /* RGB Аватарка */
+            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+            background-size: 400% 400%;
+            animation: rgb-flow 8s ease infinite;
             display: flex; align-items: center; justify-content: center;
             font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff;
             text-transform: uppercase;
+            box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; }
         .user-meta div:last-child { font-size: 11px; color: var(--gray); }
 
-        .hero { text-align: center; margin: 20px 0; }
+        .hero { text-align: center; margin: 25px 0; }
         .hero h1 {
-            font-family: 'Rajdhani', sans-serif; font-size: 38px; margin: 0;
-            text-transform: uppercase; letter-spacing: 2px;
-            background: linear-gradient(90deg, #fff, var(--accent));
-            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0;
+            text-transform: uppercase; letter-spacing: 3px;
+            /* ЖЕСТКИЙ RGB ТЕКСТ */
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+            background-size: 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rgb-flow 5s linear infinite;
+            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
         }
-        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
+        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; letter-spacing: 1px; }
 
-        /* NAVIGATION TABS */
+        /* TABS */
         .nav-tabs {
             display: flex; background: var(--card); border-radius: 12px; padding: 4px;
             margin-bottom: 25px; border: 1px solid var(--border);
@@ -67,45 +93,72 @@
             flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600;
             border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s;
         }
-        .nav-tab.active { background: var(--accent); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+        .nav-tab.active { 
+            /* RGB Кнопка Вкладки */
+            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+            color: white; 
+            box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
+        }
 
-        /* SECTIONS */
         .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
 
-        /* SHOP GRID */
-        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        
         .card {
             background: var(--card); border: 1px solid var(--border);
             border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s;
         }
-        .card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
-        .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); }
+        
+        /* RGB РАМКА ПРИ ВЫБОРЕ */
+        .card.selected { 
+            animation: border-rgb 3s linear infinite;
+            transform: scale(1.02);
+            background: rgba(255,255,255,0.02);
+        }
+
+        .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
         .card-body { padding: 16px; }
         .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
         .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
         .price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
-        .add-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; }
-        .card.selected .add-btn { background: var(--accent); color: white; }
+        
+        .add-btn { 
+            padding: 8px 16px; background: #27272a; border-radius: 8px; 
+            font-size: 14px; font-weight: 600; transition: 0.3s; 
+        }
+        
+        /* RGB КНОПКА КУПИТЬ */
+        .card.selected .add-btn { 
+            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
+            background-size: 400%;
+            animation: rgb-flow 3s linear infinite;
+            color: black; 
+            box-shadow: 0 0 15px rgba(255,255,255,0.4);
+            font-weight: 800;
+        }
+
         .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
 
-        /* FEATURES LIST STYLE */
-        .features-note {
+        /* FEATURES STYLES */
+        .info-block {
             background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);
-            padding: 12px; border-radius: 8px; font-size: 12px; color: #93c5fd; text-align: center; margin-bottom: 20px;
+            padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center;
         }
-        .feature-category { margin-bottom: 20px; }
-        .cat-title {
-            font-family: 'Rajdhani', sans-serif; font-size: 20px; color: var(--accent);
-            text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;
+        .info-title { font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 5px; }
+        .info-desc { font-size: 12px; color: #93c5fd; }
+        .feature-group { margin-bottom: 15px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+        .group-header {
+            padding: 12px 16px; background: rgba(255,255,255,0.03); font-weight: 600; font-size: 14px;
+            color: var(--accent); display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--border);
         }
-        .feature-list { list-style: none; padding: 0; margin: 0; }
-        .feature-list li {
-            font-size: 12px; color: #e5e7eb; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
-            display: flex; align-items: center; gap: 6px;
-        }
-        .feature-list li::before { content: '•'; color: var(--accent); font-weight: bold; }
+        .group-content { padding: 12px 16px; }
+        .f-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .f-list li { font-size: 11px; color: #d1d5db; display: flex; align-items: center; gap: 6px; }
+        .f-list li::before { content: '▪'; color: #52525b; }
+        .full-width { grid-column: span 2; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
@@ -116,10 +169,10 @@
         
         <div class="header">
             <div class="user-box">
-                <div class="avatar" id="avatar">?</div>
+                <div class="avatar" id="avatar">X</div>
                 <div class="user-meta">
                     <div id="username">Guest</div>
-                    <div id="userid">Open in Telegram</div>
+                    <div id="userid">Loading...</div>
                 </div>
             </div>
             <div style="text-align: right;">
@@ -130,11 +183,11 @@
 
         <div class="hero">
             <h1>XENON</h1>
-            <p>Ultimate Standoff 2 Solutions</p>
+            <p>Premium Undetected Software</p>
         </div>
 
         <div class="nav-tabs">
-            <div class="nav-tab active" onclick="switchTab('shop')">ТОВАРЫ</div>
+            <div class="nav-tab active" onclick="switchTab('shop')">МАГАЗИН</div>
             <div class="nav-tab" onclick="switchTab('features')">ФУНКЦИОНАЛ</div>
         </div>
 
@@ -143,72 +196,19 @@
         </div>
 
         <div id="features" class="section">
-            <div class="features-note">
-                ⚠ Функционал на версии iOS и Android No Root одинаковый
+            <div class="info-block">
+                <div class="info-title">ℹ ВАЖНАЯ ИНФОРМАЦИЯ</div>
+                <div class="info-desc">Функционал на версиях iOS и Android No Root полностью одинаков.</div>
+                <div style="margin-top:8px; font-size:11px; color:#666;">Functions Xenon Android / iOS iPhone</div>
             </div>
-
-            <div class="feature-category">
-                <div class="cat-title">Aimbot & Silent</div>
-                <ul class="feature-list">
-                    <li>Target Bone (Head, Neck, Stomach, Arms, Legs)</li>
-                    <li>FOV Check, Value, Color</li>
-                    <li>Smooth (X/Y Control)</li>
-                    <li>Recoil Control System (RCS 0-100%)</li>
-                    <li>Jump & Visible Check</li>
-                    <li><b>Silent Aim:</b> Auto Fire, Hit Chance 0-100%</li>
-                    <li>Ignore Smoke</li>
-                </ul>
-            </div>
-
-            <div class="feature-category">
-                <div class="cat-title">Visuals (ESP)</div>
-                <ul class="feature-list">
-                    <li>ESP Box (Box/Corner, Fill, Outline)</li>
-                    <li>ESP Line (Top/Center/Bottom)</li>
-                    <li>ESP Health Bar & Armor</li>
-                    <li>ESP Weapon (Icon & Name)</li>
-                    <li>ESP Distance, Name, Avatar</li>
-                    <li>iOS & Bomber Indicators</li>
-                    <li>Chams (Visible/Invisible/Glow/Wireframe)</li>
-                    <li>Hit Effects (Sparkles/Soul/Electronic)</li>
-                    <li>Bullet Tracers</li>
-                </ul>
-            </div>
-
-            <div class="feature-category">
-                <div class="cat-title">Skins & Models</div>
-                <ul class="feature-list">
-                    <li>Skin Changer (All Skins/Knives/Gloves)</li>
-                    <li>Weapon Chams</li>
-                    <li>Hands Chams</li>
-                    <li>Custom Models (Steve, Granny, etc.)</li>
-                </ul>
-            </div>
-
-            <div class="feature-category">
-                <div class="cat-title">Rage & Misc</div>
-                <ul class="feature-list">
-                    <li>Speed Hack (0.2x - 5.0x)</li>
-                    <li>No Clip & Silent Walk</li>
-                    <li>Telekill & God Mode</li>
-                    <li>Anti-Aim (Pitch/Yaw/Jitter/Spin)</li>
-                    <li>Double Tap & Rapid Fire</li>
-                    <li>Wallshot & Magic Bullet</li>
-                    <li>Money Hack & Crash Server</li>
-                    <li>Spectator Mode & Thirdperson</li>
-                    <li>Trash Talk & Chat Reveal</li>
-                </ul>
-            </div>
-            
-            <div class="feature-category">
-                <div class="cat-title">Settings</div>
-                <ul class="feature-list">
-                    <li>Save/Load Configs</li>
-                    <li>Menu Accent Color</li>
-                    <li>Watermark Customization</li>
-                    <li>Open by Key</li>
-                </ul>
-            </div>
+            <div class="feature-group"><div class="group-header">🎯 Aimbot</div><div class="group-content"><ul class="f-list"><li>Aim Enable</li><li>Target Bone</li><li>FOV Check & Value</li><li>FOV Color</li><li>Smooth X / Y</li><li>Recoil X / Y</li><li>Jump Check</li><li>Visible Check</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">☠ Silent Aim</div><div class="group-content"><ul class="f-list"><li>Silent Enable</li><li>Auto Fire</li><li>Target Bone</li><li>FOV Settings</li><li class="full-width">Hit Chance (0–100%)</li><li>Ignore Smoke</li><li>Jump Check</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">👁 Visuals (ESP)</div><div class="group-content"><ul class="f-list"><li>ESP Box / Line</li><li>ESP HP / Armor</li><li>ESP Weapon</li><li>ESP Name / Avatar</li><li>ESP Distance</li><li>ESP Money</li><li>iOS Indicator</li><li>Bomber Indicator</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">🎨 Hits & Chams</div><div class="group-content"><ul class="f-list full-width"><li class="full-width"><b>Chams Types:</b> Glow, Solid, Transparent, Wireframe</li><li>Enemy Chams</li><li>Local Chams</li><li>Weapon Chams</li><li>Hands Chams</li><li>Hit Effects (Soul/Spark)</li><li>Bullet Tracers</li><li>Hit Sound</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">🔪 Skins Changer</div><div class="group-content"><ul class="f-list full-width"><li class="full-width">All Weapon Skins</li><li>All Knives</li><li>All Gloves</li><li>Stickers / Charms</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">🔥 Rage</div><div class="group-content"><ul class="f-list"><li>Speed Hack</li><li>No Clip</li><li>Telekill</li><li>Silent Walk</li><li>Custom Models</li><li>Anti Flash</li><li>FOV Changer</li><li>Viewmodel X/Y/Z</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">⚡ Rage Advanced</div><div class="group-content"><ul class="f-list full-width"><li>Anti-Aim (Pitch/Yaw)</li><li>Spinbot / Jitter</li><li>Double Tap</li><li>Magic Bullet (Wallshot)</li><li>God Mode</li><li>Crash Server</li><li>Fake-Flick</li><li>Money Hack</li></ul></div></div>
+            <div class="feature-group"><div class="group-header">⚙ Config & Menu</div><div class="group-content"><ul class="f-list"><li>Create/Save Config</li><li>Load/Remove Config</li><li>Open by Key</li><li>Accent Color</li><li>Watermark Settings</li><li>Menu Scale</li></ul></div></div>
         </div>
 
     </div>
@@ -216,31 +216,25 @@
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
+    tg.ready(); // Сообщаем о готовности
 
-    // СИНХРОНИЗАЦИЯ ПРОФИЛЯ (Надежный метод)
+    // ИНИЦИАЛИЗАЦИЯ ПРОФИЛЯ
     function initProfile() {
-        // Пробуем взять данные
         const user = tg.initDataUnsafe.user;
-        
         if (user) {
-            document.getElementById('username').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
+            document.getElementById('username').innerText = user.first_name;
             document.getElementById('userid').innerText = `ID: ${user.id}`;
-            // Берем первую букву имени или username
             const initial = user.first_name ? user.first_name[0] : (user.username ? user.username[0] : 'X');
             document.getElementById('avatar').innerText = initial.toUpperCase();
-            
-            // Если есть фото (сложно получить без API бота, поэтому оставляем букву для скорости)
         } else {
             // Если открыто не в телеграм
-            document.getElementById('userid').innerText = "Guest Mode";
+            document.getElementById('username').innerText = "Guest Mode";
+            document.getElementById('userid').innerText = "Open via Telegram";
         }
     }
-    
-    // Запускаем сразу и через 100мс на всякий случай
     initProfile();
-    setTimeout(initProfile, 100);
 
-    // ЛОГИКА ТОВАРОВ
+    // ТОВАРЫ
     const products = [
         { 
             id: 1, type: 'android', name: 'Xenon Android No Root', price: 450, 
@@ -287,7 +281,7 @@
             tg.MainButton.hide();
         } else {
             selected = p.id;
-            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()} — ${p.price}₽`;
+            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()}`;
             tg.MainButton.color = "#3b82f6";
             tg.MainButton.textColor = "#fff";
             tg.MainButton.show();
@@ -300,19 +294,12 @@
         tg.sendData(JSON.stringify(p));
     });
 
-    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     window.switchTab = function(tabName) {
         tg.HapticFeedback.selectionChanged();
-        
-        // Скрываем все секции
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
-        // Убираем активный класс у кнопок
         document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         
-        // Показываем нужную
         document.getElementById(tabName).classList.add('active');
-        // Подсвечиваем кнопку
-        // (Находим кнопку по тексту onClick, простой способ)
         const btnIndex = tabName === 'shop' ? 0 : 1;
         document.querySelectorAll('.nav-tab')[btnIndex].classList.add('active');
     }
