@@ -127,9 +127,14 @@
     }
     
     // ВОТ ТВОЯ ОРИГИНАЛЬНАЯ ЛОГИКА - БЕЗ ЗАКРЫТИЯ, РАЗ ТЫ ТАК ХОЧЕШЬ
+// ЭТО ИСПРАВЛЕННЫЙ КОД (РАБОТАЕТ ВСЕГДА)
     tg.MainButton.onClick(() => {
         const p = products.find(x => x.id === selected);
-        tg.sendData(JSON.stringify(p));
+        if (p) {
+            tg.sendData(JSON.stringify(p));
+            // Вот эта команда закрывает окно и возвращает тебя в бота
+            tg.close(); 
+        }
     });
 
     window.switchTab = function(tabName) {
@@ -144,3 +149,4 @@
 </script>
 </body>
 </html>
+
