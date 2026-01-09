@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Xenon Standoff</title>
+    <title>Xenon Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;700&family=Inter:wght@400;600&display=swap');
@@ -12,35 +12,9 @@
             --bg: #050505;
             --card: #0f0f11;
             --border: #27272a;
-            --accent: #3b82f6; /* СИНИЙ АКЦЕНТ */
+            --accent: #3b82f6; /* Xenon Blue */
             --text: #ffffff;
             --gray: #9ca3af;
-        }
-
-        /* --- RGB АНИМАЦИИ --- */
-        @keyframes rgb-flow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes border-rgb {
-            0% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-            20% { border-color: #ffff00; box-shadow: 0 0 15px rgba(255,255,0,0.4); }
-            40% { border-color: #00ff00; box-shadow: 0 0 15px rgba(0,255,0,0.4); }
-            60% { border-color: #00ffff; box-shadow: 0 0 15px rgba(0,255,255,0.4); }
-            80% { border-color: #0000ff; box-shadow: 0 0 15px rgba(0,0,255,0.4); }
-            100% { border-color: #ff0000; box-shadow: 0 0 15px rgba(255,0,0,0.4); }
-        }
-
-        .rgb-text {
-            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
-            background-size: 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rgb-flow 3s linear infinite;
-            font-weight: 800;
-            text-transform: uppercase;
         }
 
         body {
@@ -51,11 +25,13 @@
             overflow-x: hidden;
             -webkit-tap-highlight-color: transparent;
             min-height: 100vh;
-            background-image: radial-gradient(circle at 50% -20%, #0f172a 0%, #000000 70%);
+            /* Синий неон фон */
+            background-image: radial-gradient(circle at 50% -20%, #1e3a8a 0%, #050505 50%);
         }
 
         .container { padding: 16px; padding-bottom: 80px; }
 
+        /* HEADER */
         .header {
             display: flex; justify-content: space-between; align-items: center;
             margin-bottom: 20px; padding: 12px;
@@ -65,30 +41,24 @@
         .user-box { display: flex; align-items: center; gap: 10px; }
         .avatar {
             width: 40px; height: 40px; border-radius: 8px;
-            background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3);
-            background-size: 400% 400%;
-            animation: rgb-flow 8s ease infinite;
+            background: linear-gradient(135deg, var(--accent), #1d4ed8);
             display: flex; align-items: center; justify-content: center;
             font-weight: bold; font-family: 'Rajdhani', sans-serif; font-size: 18px; color: #fff;
             text-transform: uppercase;
-            box-shadow: 0 0 10px rgba(255,255,255,0.2);
         }
         .user-meta div:first-child { font-weight: 600; font-size: 14px; }
         .user-meta div:last-child { font-size: 11px; color: var(--gray); }
 
-        .hero { text-align: center; margin: 25px 0; }
+        .hero { text-align: center; margin: 20px 0; }
         .hero h1 {
-            font-family: 'Rajdhani', sans-serif; font-size: 44px; margin: 0;
-            text-transform: uppercase; letter-spacing: 3px;
-            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
-            background-size: 400%;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: rgb-flow 5s linear infinite;
-            filter: drop-shadow(0 0 5px rgba(255,255,255,0.3));
+            font-family: 'Rajdhani', sans-serif; font-size: 38px; margin: 0;
+            text-transform: uppercase; letter-spacing: 2px;
+            background: linear-gradient(90deg, #fff, var(--accent));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
         }
-        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; letter-spacing: 1px; }
+        .hero p { color: var(--gray); font-size: 13px; margin-top: 5px; }
 
+        /* NAVIGATION TABS */
         .nav-tabs {
             display: flex; background: var(--card); border-radius: 12px; padding: 4px;
             margin-bottom: 25px; border: 1px solid var(--border);
@@ -97,51 +67,46 @@
             flex: 1; text-align: center; padding: 10px; font-size: 13px; font-weight: 600;
             border-radius: 8px; color: var(--gray); cursor: pointer; transition: 0.3s;
         }
-        .nav-tab.active { 
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6);
-            color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4);
-        }
+        .nav-tab.active { background: var(--accent); color: white; box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
 
+        /* SECTIONS */
         .section { display: none; animation: fadeIn 0.4s ease; }
         .section.active { display: block; }
-        .grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
-        
+
+        /* SHOP GRID */
+        .grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
         .card {
             background: var(--card); border: 1px solid var(--border);
             border-radius: 16px; overflow: hidden; position: relative; transition: 0.3s;
         }
-        .card.selected { 
-            animation: border-rgb 3s linear infinite;
-            transform: scale(1.02); background: rgba(255,255,255,0.02);
-        }
-
-        .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); background: #000; }
+        .card.selected { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+        .card-img { width: 100%; height: 180px; object-fit: cover; border-bottom: 1px solid var(--border); }
         .card-body { padding: 16px; }
-        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 8px; }
-        .card-desc { font-size: 13px; color: #d1d5db; line-height: 1.5; margin-bottom: 15px; }
-        
+        .card-title { font-weight: 700; font-size: 18px; color: #fff; margin-bottom: 5px; }
+        .card-desc { font-size: 12px; color: var(--gray); line-height: 1.5; margin-bottom: 15px; }
         .card-footer { display: flex; justify-content: space-between; align-items: center; }
         .price { font-family: 'Rajdhani', sans-serif; font-weight: 700; font-size: 22px; color: #fff; }
-        
-        .add-btn { 
-            padding: 8px 16px; background: #27272a; border-radius: 8px; 
-            font-size: 14px; font-weight: 600; transition: 0.3s;
-        }
-        .card.selected .add-btn { 
-            background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff);
-            background-size: 400%; animation: rgb-flow 3s linear infinite;
-            color: black; box-shadow: 0 0 15px rgba(255,255,255,0.4); font-weight: 800;
-        }
-
+        .add-btn { padding: 8px 16px; background: #27272a; border-radius: 8px; font-size: 14px; font-weight: 600; }
+        .card.selected .add-btn { background: var(--accent); color: white; }
         .badge { position: absolute; top: 10px; right: 10px; background: rgba(0,0,0,0.7); color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: bold; border: 1px solid var(--border); }
-        .info-block { background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3); padding: 15px; border-radius: 12px; margin-bottom: 25px; text-align: center; }
-        .feature-group { margin-bottom: 15px; background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
-        .group-header { padding: 12px 16px; background: rgba(255,255,255,0.03); font-weight: 600; font-size: 14px; color: var(--accent); display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border); }
-        .group-content { padding: 12px 16px; }
-        .f-list { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .f-list li { font-size: 11px; color: #d1d5db; display: flex; align-items: center; gap: 6px; }
-        .f-list li::before { content: '▪'; color: #52525b; }
-        .full-width { grid-column: span 2; }
+
+        /* FEATURES LIST STYLE */
+        .features-note {
+            background: rgba(59, 130, 246, 0.1); border: 1px solid rgba(59, 130, 246, 0.3);
+            padding: 12px; border-radius: 8px; font-size: 12px; color: #93c5fd; text-align: center; margin-bottom: 20px;
+        }
+        .feature-category { margin-bottom: 20px; }
+        .cat-title {
+            font-family: 'Rajdhani', sans-serif; font-size: 20px; color: var(--accent);
+            text-transform: uppercase; margin-bottom: 10px; border-bottom: 1px solid var(--border); padding-bottom: 5px;
+        }
+        .feature-list { list-style: none; padding: 0; margin: 0; }
+        .feature-list li {
+            font-size: 12px; color: #e5e7eb; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);
+            display: flex; align-items: center; gap: 6px;
+        }
+        .feature-list li::before { content: '•'; color: var(--accent); font-weight: bold; }
+
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
@@ -151,10 +116,10 @@
         
         <div class="header">
             <div class="user-box">
-                <div class="avatar" id="avatar">X</div>
+                <div class="avatar" id="avatar">?</div>
                 <div class="user-meta">
                     <div id="username">Guest</div>
-                    <div id="userid">Loading...</div>
+                    <div id="userid">Open in Telegram</div>
                 </div>
             </div>
             <div style="text-align: right;">
@@ -165,11 +130,11 @@
 
         <div class="hero">
             <h1>XENON</h1>
-            <p>Premium Undetected Software</p>
+            <p>Ultimate Standoff 2 Solutions</p>
         </div>
 
         <div class="nav-tabs">
-            <div class="nav-tab active" onclick="switchTab('shop')">МАГАЗИН</div>
+            <div class="nav-tab active" onclick="switchTab('shop')">ТОВАРЫ</div>
             <div class="nav-tab" onclick="switchTab('features')">ФУНКЦИОНАЛ</div>
         </div>
 
@@ -178,52 +143,114 @@
         </div>
 
         <div id="features" class="section">
-            <div class="info-block">
-                <div style="font-weight:bold; color:#fff; margin-bottom:5px;">ℹ ВАЖНАЯ ИНФОРМАЦИЯ</div>
-                <div style="font-size:12px; color:#93c5fd;">Функционал на версиях iOS и Android No Root полностью одинаков.</div>
+            <div class="features-note">
+                ⚠ Функционал на версии iOS и Android No Root одинаковый
             </div>
-            <div class="feature-group"><div class="group-header">🎯 Aimbot</div><div class="group-content"><ul class="f-list"><li>Aim Enable</li><li>Target Bone</li><li>FOV Check</li><li>Smooth</li></ul></div></div>
-            <div class="feature-group"><div class="group-header">👁 Visuals</div><div class="group-content"><ul class="f-list"><li>ESP Box</li><li>ESP Line</li><li>ESP Health</li><li>ESP Name</li></ul></div></div>
+
+            <div class="feature-category">
+                <div class="cat-title">Aimbot & Silent</div>
+                <ul class="feature-list">
+                    <li>Target Bone (Head, Neck, Stomach, Arms, Legs)</li>
+                    <li>FOV Check, Value, Color</li>
+                    <li>Smooth (X/Y Control)</li>
+                    <li>Recoil Control System (RCS 0-100%)</li>
+                    <li>Jump & Visible Check</li>
+                    <li><b>Silent Aim:</b> Auto Fire, Hit Chance 0-100%</li>
+                    <li>Ignore Smoke</li>
+                </ul>
+            </div>
+
+            <div class="feature-category">
+                <div class="cat-title">Visuals (ESP)</div>
+                <ul class="feature-list">
+                    <li>ESP Box (Box/Corner, Fill, Outline)</li>
+                    <li>ESP Line (Top/Center/Bottom)</li>
+                    <li>ESP Health Bar & Armor</li>
+                    <li>ESP Weapon (Icon & Name)</li>
+                    <li>ESP Distance, Name, Avatar</li>
+                    <li>iOS & Bomber Indicators</li>
+                    <li>Chams (Visible/Invisible/Glow/Wireframe)</li>
+                    <li>Hit Effects (Sparkles/Soul/Electronic)</li>
+                    <li>Bullet Tracers</li>
+                </ul>
+            </div>
+
+            <div class="feature-category">
+                <div class="cat-title">Skins & Models</div>
+                <ul class="feature-list">
+                    <li>Skin Changer (All Skins/Knives/Gloves)</li>
+                    <li>Weapon Chams</li>
+                    <li>Hands Chams</li>
+                    <li>Custom Models (Steve, Granny, etc.)</li>
+                </ul>
+            </div>
+
+            <div class="feature-category">
+                <div class="cat-title">Rage & Misc</div>
+                <ul class="feature-list">
+                    <li>Speed Hack (0.2x - 5.0x)</li>
+                    <li>No Clip & Silent Walk</li>
+                    <li>Telekill & God Mode</li>
+                    <li>Anti-Aim (Pitch/Yaw/Jitter/Spin)</li>
+                    <li>Double Tap & Rapid Fire</li>
+                    <li>Wallshot & Magic Bullet</li>
+                    <li>Money Hack & Crash Server</li>
+                    <li>Spectator Mode & Thirdperson</li>
+                    <li>Trash Talk & Chat Reveal</li>
+                </ul>
+            </div>
+            
+            <div class="feature-category">
+                <div class="cat-title">Settings</div>
+                <ul class="feature-list">
+                    <li>Save/Load Configs</li>
+                    <li>Menu Accent Color</li>
+                    <li>Watermark Customization</li>
+                    <li>Open by Key</li>
+                </ul>
+            </div>
         </div>
+
     </div>
 
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
-    tg.ready();
 
+    // СИНХРОНИЗАЦИЯ ПРОФИЛЯ (Надежный метод)
     function initProfile() {
+        // Пробуем взять данные
         const user = tg.initDataUnsafe.user;
+        
         if (user) {
-            document.getElementById('username').innerText = user.first_name;
+            document.getElementById('username').innerText = user.first_name + (user.last_name ? ' ' + user.last_name : '');
             document.getElementById('userid').innerText = `ID: ${user.id}`;
-            const initial = user.first_name ? user.first_name[0] : 'X';
+            // Берем первую букву имени или username
+            const initial = user.first_name ? user.first_name[0] : (user.username ? user.username[0] : 'X');
             document.getElementById('avatar').innerText = initial.toUpperCase();
+            
+            // Если есть фото (сложно получить без API бота, поэтому оставляем букву для скорости)
         } else {
-            document.getElementById('username').innerText = "Guest Mode";
-            document.getElementById('userid').innerText = "Open via Telegram";
+            // Если открыто не в телеграм
+            document.getElementById('userid').innerText = "Guest Mode";
         }
     }
+    
+    // Запускаем сразу и через 100мс на всякий случай
     initProfile();
+    setTimeout(initProfile, 100);
 
+    // ЛОГИКА ТОВАРОВ
     const products = [
         { 
-            id: 1, 
-            type: 'android', 
-            name: 'Xenon Android No Root', 
-            price: 450, 
-            desc: 'Legit и Rage Настройки, Антибан, Undetected 2026. Подписка - <span class="rgb-text">НАВСЕГДА</span>.', 
-            img: 'noroot.png', 
-            badge: 'NO ROOT' 
+            id: 1, type: 'android', name: 'Xenon Android No Root', price: 450, 
+            desc: 'Legit & Rage настройки. Полный Undetected 2026. Без рут прав.', 
+            img: 'noroot.png', badge: 'NO ROOT' 
         },
         { 
-            id: 2, 
-            type: 'ios', 
-            name: 'Xenon iOS Private', 
-            price: 1200, 
-            desc: 'Без джейлбрейка на все версии iPhone/iPad. Подписка - <span class="rgb-text">НАВСЕГДА</span>.', 
-            img: 'ios.png', 
-            badge: 'NO JAIL' 
+            id: 2, type: 'ios', name: 'Xenon iOS Private', price: 1200, 
+            desc: 'Приватная версия для iPhone/iPad. Без Jailbreak. Сертификат.', 
+            img: 'ios.png', badge: 'NO JAIL' 
         }
     ];
 
@@ -254,13 +281,13 @@
     }
 
     function select(p) {
-        if(tg.HapticFeedback) tg.HapticFeedback.impactOccurred('medium');
+        tg.HapticFeedback.impactOccurred('medium');
         if (selected === p.id) {
             selected = null;
             tg.MainButton.hide();
         } else {
             selected = p.id;
-            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()}`;
+            tg.MainButton.text = `КУПИТЬ ${p.name.toUpperCase()} — ${p.price}₽`;
             tg.MainButton.color = "#3b82f6";
             tg.MainButton.textColor = "#fff";
             tg.MainButton.show();
@@ -268,29 +295,24 @@
         renderProducts();
     }
 
-    // --- ВОТ ЭТО ГЛАВНЫЙ ФИКС ---
-// ИСПРАВЛЕННАЯ ФУНКЦИЯ (С ЗАДЕРЖКОЙ)
     tg.MainButton.onClick(() => {
         const p = products.find(x => x.id === selected);
-        
-        if (p) {
-            // 1. Отправляем данные
-            tg.sendData(JSON.stringify(p));
-            
-            // 2. Ждем 100мс перед закрытием, чтобы данные точно улетели
-            setTimeout(() => {
-                tg.close();
-            }, 100);
-        }
+        tg.sendData(JSON.stringify(p));
     });
-    // -----------------------------
 
+    // ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     window.switchTab = function(tabName) {
-        if(tg.HapticFeedback) tg.HapticFeedback.selectionChanged();
+        tg.HapticFeedback.selectionChanged();
+        
+        // Скрываем все секции
         document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+        // Убираем активный класс у кнопок
         document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
         
+        // Показываем нужную
         document.getElementById(tabName).classList.add('active');
+        // Подсвечиваем кнопку
+        // (Находим кнопку по тексту onClick, простой способ)
         const btnIndex = tabName === 'shop' ? 0 : 1;
         document.querySelectorAll('.nav-tab')[btnIndex].classList.add('active');
     }
@@ -300,4 +322,3 @@
 </script>
 </body>
 </html>
-
