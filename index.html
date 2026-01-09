@@ -206,6 +206,7 @@
 <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
+    alert(JSON.stringify(tg.initDataUnsafe));
     tg.ready();
 
     // ИНИЦИАЛИЗАЦИЯ ПРОФИЛЯ
@@ -305,3 +306,4 @@
 </script>
 </body>
 </html>
+
