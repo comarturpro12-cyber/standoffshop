@@ -318,28 +318,35 @@
         tg.HapticFeedback.notificationOccurred('success');
     }
 
-    // === УМНЫЙ СЧЕТЧИК ЮЗЕРОВ ===
-    function initUserCounter() {
-        // Логика: Добавляем +1 юзера раз в (15-60) минут
-        // Храним: последнее кол-во и время последнего обновления
-        
-        let count = parseInt(localStorage.getItem('xenon_u_count')) || 2240;
-        let lastUpdate = parseInt(localStorage.getItem('xenon_u_time')) || Date.now();
+// === УМНЫЙ СЧЕТЧИК (ЗАВИСИТ ОТ ВРЕМЕНИ) ===
+function initUserCounter() {
+    const element = document.getElementById('user-count');
+    if (!element) return;
 
+    // 1. НАСТРОЙКИ
+    // Дата "старта" накрутки. Не меняй её, чтобы цифра не сбрасывалась.
+    const START_DATE = new Date("2025-01-01T00:00:00").getTime(); 
+    const BASE_USERS = 2240;  // С какой цифры начинаем
+    const USERS_PER_HOUR = 5; // Скорость: +5 юзеров в час (или 1 юзер каждые 12 минут)
+
+    function update() {
         const now = Date.now();
-        const diffMinutes = (now - lastUpdate) / 1000 / 60;
+        // Считаем, сколько часов прошло с старта
+        const hoursPassed = (now - START_DATE) / (1000 * 60 * 60);
+        
+        // Формула: База + (Часы * Скорость)
+        const currentCount = Math.floor(BASE_USERS + (hoursPassed * USERS_PER_HOUR));
 
-        // Если прошло больше случайного времени (генерим сид из времени)
-        // Для простоты: если прошло > 40 минут с прошлого раза, добавляем +1
-        if (diffMinutes > 40) {
-            count++;
-            localStorage.setItem('xenon_u_count', count);
-            localStorage.setItem('xenon_u_time', now);
-        }
-
-        document.getElementById('user-count').innerText = count;
+        element.innerText = currentCount.toLocaleString(); // Добавляет пробелы (2 450)
     }
-    initUserCounter(); // Запускаем 1 раз при старте
+
+    // Запускаем сразу
+    update();
+    // И проверяем каждую минуту (чтобы цифра могла обновиться прямо на глазах)
+    setInterval(update, 60000); 
+}
+
+initUserCounter();
 
     // БАЗА ТОВАРОВ
     const products = [
@@ -563,6 +570,7 @@
 </script>
 </body>
 </html>
+
 
 
 
