@@ -323,26 +323,31 @@ function initUserCounter() {
     const element = document.getElementById('user-count');
     if (!element) return;
 
-    // 1. НАСТРОЙКИ
-    // Дата "старта" накрутки. Не меняй её, чтобы цифра не сбрасывалась.
-    const START_DATE = new Date("2025-01-01T00:00:00").getTime(); 
-    const BASE_USERS = 2240;  // С какой цифры начинаем
-    const USERS_PER_HOUR = 5; // Скорость: +5 юзеров в час (или 1 юзер каждые 12 минут)
+    // --- НАСТРОЙКИ (ИСПРАВЛЕНО) ---
+    // 1. Дата старта: 1 Января 2026 года (чтобы не накрутило лишнего за прошлый год)
+    const START_DATE = new Date("2026-01-01T00:00:00").getTime(); 
+    
+    // 2. База: Ставим 500. 
+    // (Скрипт добавит к ним еще ~700 человек, которые якобы пришли с 1 января. Итого будет ~1200)
+    const BASE_USERS = 500;  
+    
+    // 3. Скорость: 3 человека в час (выглядит реально)
+    const USERS_PER_HOUR = 3; 
 
     function update() {
         const now = Date.now();
-        // Считаем, сколько часов прошло с старта
+        // Считаем, сколько часов прошло с старта (с 1 янв 2026)
         const hoursPassed = (now - START_DATE) / (1000 * 60 * 60);
         
         // Формула: База + (Часы * Скорость)
         const currentCount = Math.floor(BASE_USERS + (hoursPassed * USERS_PER_HOUR));
 
-        element.innerText = currentCount.toLocaleString(); // Добавляет пробелы (2 450)
+        element.innerText = currentCount.toLocaleString(); // Добавляет пробелы (1 220)
     }
 
     // Запускаем сразу
     update();
-    // И проверяем каждую минуту (чтобы цифра могла обновиться прямо на глазах)
+    // И проверяем каждую минуту
     setInterval(update, 60000); 
 }
 
@@ -570,6 +575,7 @@ initUserCounter();
 </script>
 </body>
 </html>
+
 
 
 
