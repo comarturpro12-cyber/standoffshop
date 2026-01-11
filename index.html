@@ -203,7 +203,7 @@
                 <div class="queue-number" id="queue-pos">...</div>
                 
                 <div class="progress-bar-bg"><div class="progress-bar-fill"></div></div>
-                <div class="wait-time">Примерное ожидание: ~14 дней</div>
+                <div class="wait-time">Примерное ожидание: ~7 дней</div>
 
                 <div class="queue-desc">
                     Ключи выдаются в порядке живой очереди. Вы автоматически зарегистрированы. Количество обновляется каждые 1-2 минуты.
@@ -289,13 +289,14 @@
     }
     initData();
 
-    // === ОЧЕРЕДЬ ===
+// === ОЧЕРЕДЬ (ОБНОВЛЕННАЯ) ===
     function initQueueSystem() {
         let startPos = localStorage.getItem('xenon_q_pos');
         let startTime = localStorage.getItem('xenon_q_time');
 
         if (!startPos) {
-            startPos = Math.floor(Math.random() * (12000 - 8000 + 1)) + 8000;
+            // Ставим от 500 до 800
+            startPos = Math.floor(Math.random() * (800 - 500 + 1)) + 500;
             startTime = Date.now();
             localStorage.setItem('xenon_q_pos', startPos);
             localStorage.setItem('xenon_q_time', startTime);
@@ -303,9 +304,14 @@
 
         const now = Date.now();
         const elapsedMinutes = (now - parseInt(startTime)) / 1000 / 60;
-        const movedSpots = Math.floor(elapsedMinutes / 2); 
+        
+        // Делим на 10 (1 место в 10 минут), чтобы 600 человек растянулись на ~4 дня
+        const movedSpots = Math.floor(elapsedMinutes / 10);
+        
         let currentPos = parseInt(startPos) - movedSpots;
-        if (currentPos < 100) currentPos = 142; 
+        
+        // Если очередь дошла до конца (меньше 10), откидываем назад (твоя логика "не получат")
+        if (currentPos < 31) currentPos = 192; 
 
         document.getElementById('queue-pos').innerText = currentPos;
     }
@@ -575,6 +581,7 @@ initUserCounter();
 </script>
 </body>
 </html>
+
 
 
 
